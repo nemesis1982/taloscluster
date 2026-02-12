@@ -8,6 +8,4 @@ forgetool
 sopssecret.yaml
 sopssecret*
 *sopssecret*
-ssh-public-key.txt
-.sops.yaml
 mounts/
