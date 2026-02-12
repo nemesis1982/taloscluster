@@ -1,0 +1,13 @@
+age.agekey
+^forgetool.exe
+^forgetool*
+^forgetool
+*forgetool.exe
+forgetool.exe
+forgetool
+sopssecret.yaml
+sopssecret*
+*sopssecret*
+ssh-public-key.txt
+.sops.yaml
+mounts/
