@@ -30,6 +30,8 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    TZ: Europe/Amsterdam
+    
     ingress:
       main:
         enabled: true
