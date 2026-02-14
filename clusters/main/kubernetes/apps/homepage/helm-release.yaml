@@ -59,16 +59,17 @@ spec:
 #        mountPath: /media
 #        server: ${NFS_IP}
 
-#    persistence:
-#      config:
-#        volsync:
-#          - name: config
-#            type: restic
-#            credentials: minio
-#            dest: #VolSync Destination (Restore)
-#              enabled: true
-#            src: #VolSync Source (Backup)
-#              enabled: true
+
+    persistence:
+      config:
+        volsync:
+          - name: config
+            type: restic
+            credentials: minio
+            dest: #VolSync Destination (Restore)
+              enabled: true
+            src: #VolSync Source (Backup)
+              enabled: true
 
     addons:
       codeserver:
