@@ -39,6 +39,7 @@ spec:
         bucket: "taloscluster"
         accessKey: "${S3_ACCESKEY}"
         secretKey: "${S3_SECRETKEY}"
+        encKey: "${S3_ENC}"
 
     ingress:
       main:
