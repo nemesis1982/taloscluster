@@ -32,6 +32,14 @@ spec:
   values:
     TZ: Europe/Amsterdam
 
+    credentials:
+      minio:
+        type: s3
+        url: "${S3_URL}"
+        bucket: "taloscluster"
+        accessKey: "${S3_ACCESKEY}"
+        secretKey: "${S3_SECRETKEY}"
+
     ingress:
       main:
         enabled: true
@@ -43,24 +51,24 @@ spec:
             enabled: true
             certificateIssuer: domain-0-le-prod
 
-    persistence:
-      config:
-        enabled: true
-        type: nfs
-        path: ${NFS_APP}/homepage
-        mountPath: /media
-        server: ${NFS_IP}
-
 #    persistence:
 #      config:
-#        volsync:
-#          - name: config
-#            type: restic
-#            credentials: minio
-#            dest: #VolSync Destination (Restore)
-#              enabled: true
-#            src: #VolSync Source (Backup)
-#              enabled: true
+#        enabled: true
+#        type: nfs
+#        path: ${NFS_APP}/homepage
+#        mountPath: /media
+#        server: ${NFS_IP}
+
+    persistence:
+      config:
+        volsync:
+          - name: config
+            type: restic
+            credentials: minio
+            dest: #VolSync Destination (Restore)
+              enabled: true
+            src: #VolSync Source (Backup)
+              enabled: true
 
     addons:
       codeserver:
