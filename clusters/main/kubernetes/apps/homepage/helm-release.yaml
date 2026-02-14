@@ -51,15 +51,6 @@ spec:
             enabled: true
             certificateIssuer: domain-0-le-prod
 
-#    persistence:
-#      config:
-#        enabled: true
-#        type: nfs
-#        path: ${NFS_APP}/homepage
-#        mountPath: /media
-#        server: ${NFS_IP}
-
-
     persistence:
       config:
         volsync:
