@@ -46,7 +46,7 @@ spec:
           homepage:
             enabled: true
             group: "Test"
-            weight: 5
+            weight: 99
             widget:
               custom:
                 key: "https://librespeed.${DOMAIN_0}"
