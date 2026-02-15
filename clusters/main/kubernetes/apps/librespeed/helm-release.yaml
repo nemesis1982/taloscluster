@@ -42,4 +42,12 @@ spec:
           certManager:
             enabled: true
             certificateIssuer: domain-0-le-prod
+      
+          homepage:
+            enabled: true
+            group: "Test"
+            weight: 5
+            widget:
+              custom:
+                key: "https://librespeed.${DOMAIN_0}"
     # Add here your chart specific values
