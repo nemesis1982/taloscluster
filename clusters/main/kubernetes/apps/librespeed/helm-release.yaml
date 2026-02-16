@@ -47,7 +47,8 @@ spec:
             enabled: true
             group: "Test"
             weight: 99
-            widget:
-              custom:
-                key: "https://librespeed.${DOMAIN_0}"
+            url: "https://librespeed.${DOMAIN_0}"
+            #widget:
+             # custom:
+              #  key: "https://librespeed.${DOMAIN_0}"
     # Add here your chart specific values
