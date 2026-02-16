@@ -54,7 +54,7 @@ spec:
           homepage:
             enabled: true
             group: "Management"
-            weight: 80
+            weight: 10
             widget:
               custom:
                 key: "https://kube.${DOMAIN_0}"
