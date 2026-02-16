@@ -108,6 +108,6 @@ spec:
           credentials: minio
           # revision: "1"
 
-    resources:
-      requests:
-        cpu: 10m
+#    resources:
+#      requests:
+#        cpu: 10m
