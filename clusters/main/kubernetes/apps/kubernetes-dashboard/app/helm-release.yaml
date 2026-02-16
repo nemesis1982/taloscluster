@@ -57,7 +57,7 @@ spec:
             weight: 80
             url: "https://kube.${DOMAIN_0}"
             widget:
-            - kubernetes:
+              kubernetes:
                 cluster:
                   # Shows cluster-wide statistics
                   show: true
