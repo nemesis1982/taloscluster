@@ -52,7 +52,7 @@ spec:
                 LLDAP_SMTP_OPTIONS__PORT: 587
                 LLDAP_SMTP_OPTIONS__REPLY_TO: Do not reply "<no-reply@${DOMAIN}>"
                 LLDAP_SMTP_OPTIONS__SERVER: ${SMTP_HOST}
-                LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION: TLS
+                LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION: STARTTLS
                 LLDAP_SMTP_OPTIONS__USER: ${SMTP_USER}
                 LLDAP_key_file: /data/private_key
 
@@ -108,6 +108,6 @@ spec:
           credentials: minio
           # revision: "1"
 
-    resources:
-      requests:
-        cpu: 10m
+#    resources:
+#      requests:
+#        cpu: 10m
