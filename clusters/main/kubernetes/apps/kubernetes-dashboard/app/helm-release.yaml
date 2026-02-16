@@ -55,16 +55,6 @@ spec:
             enabled: true
             group: "Management"
             weight: 80
-            url: "https://kube.${DOMAIN_0}"
             widget:
-              kubernetes:
-                cluster:
-                  # Shows cluster-wide statistics
-                  show: true
-                  # Shows the aggregate CPU stats
-                  cpu: true
-                  # Shows the aggregate memory stats
-                  memory: true
-                  # Shows a custom label
-                  showLabel: true
-                  label: "cluster"
+              custom:
+                key: "https://kube.${DOMAIN_0}"
