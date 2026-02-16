@@ -4,3 +4,4 @@ resources:
   - kubernetes-dashboard/ks.yaml
   - librespeed
   - homepage
+  - lldap/ks.yaml
