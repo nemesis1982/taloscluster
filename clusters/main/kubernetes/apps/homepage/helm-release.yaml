@@ -74,11 +74,11 @@ spec:
               volumeMounts:
               - mountPath: /node
                 name: mydir
-            volumes:
-              hostPath:
-              - name: mydir
-                path: /
-                type: DirectoryOrCreate
+          volumes:
+            hostPath:
+            - name: mydir
+              path: /
+              type: DirectoryOrCreate
 
     resources:
       requests:
