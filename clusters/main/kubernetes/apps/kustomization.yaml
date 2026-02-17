@@ -5,3 +5,4 @@ resources:
   - librespeed
   - homepage
   - lldap/ks.yaml
+  - authalia/ks.yaml
