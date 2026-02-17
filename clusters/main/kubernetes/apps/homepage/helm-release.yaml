@@ -71,14 +71,6 @@ spec:
             main:
               env:
                 HOMEPAGE_ALLOWED_HOSTS: "homepage.${DOMAIN_0}"
-              volumeMounts:
-              - mountPath: /node
-                name: mydir
-          volumes:
-            hostPath:
-            - name: mydir
-              path: /
-              type: DirectoryOrCreate
 
     resources:
       requests:
