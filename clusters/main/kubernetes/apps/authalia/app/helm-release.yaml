@@ -111,6 +111,6 @@ spec:
                 AUTHELIA_STORAGE_ENCRYPTION_KEY: ${AUTHELIA_ENCRYPTION_KEY}
                 X_AUTHELIA_CONFIG_FILTERS: template
 
-    resources:
-      requests:
-        cpu: 10m
+#    resources:
+#      requests:
+#        cpu: 10m
