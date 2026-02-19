@@ -21,7 +21,7 @@ data:
         password: ${AUTHELIA_PASSWORD}
     notifier:
       smtp:
-        address: submissions://${SMTP_HOST}:587
+        address: smtp://${SMTP_HOST}:587
         username: ${SMTP_USER}
         password: ${SMTP_PASSWORD}
         sender: Authelia Admin <no-reply@${DOMAIN_0}>
