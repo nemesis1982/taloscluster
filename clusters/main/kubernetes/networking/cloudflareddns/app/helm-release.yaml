@@ -42,4 +42,4 @@ spec:
                 INTERVAL: 3600
                 UPDATE_IPV6: false
                 CF_APITOKEN: ${DOMAIN_0_CLOUDFLARE_TOKEN}
-                CF_HOSTS: "flux-webhook.${DOMAIN_0},auth.${DOMAIN_0}"
+                CF_HOSTS: "flux-webhook.${DOMAIN_0},auth.${DOMAIN_0},makoto-cloud.${DOMAIN_0},request.${DOMAIN_0}"
