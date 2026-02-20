@@ -36,12 +36,6 @@ spec:
         accessKey: "${S3_ACCESKEY}"
         secretKey: "${S3_SECRETKEY}"
         encrKey: "${S3_ENC}"
-    service:
-      main:
-        type: ClusterIP
-        ports:
-          main:
-            port: 5055
     ingress:
       main:
         enabled: true
@@ -52,14 +46,6 @@ spec:
               - path: /
                 pathType: Prefix
         integrations:
-#          nginx:
-#            enabled: true
-#          homepage:
-#            enabled: false
-#            group: "Media Requests"
-#            widget:
-#              custom:
-#                key: "${OVERSEERR_KEY}"
           certManager:
             enabled: true
             certificateIssuer: domain-0-le-prod
