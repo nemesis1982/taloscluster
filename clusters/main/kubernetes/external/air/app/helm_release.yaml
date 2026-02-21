@@ -40,7 +40,7 @@ spec:
         ports:
           main:
             protocol: http
-            port: 8989
+            port: 7878
 
     ingress:
       main:
