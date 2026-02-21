@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - makoto-cloud/ks.yaml
   - overseer/ks.yaml
-  - registry/ks.yaml
   - namespace.yaml
