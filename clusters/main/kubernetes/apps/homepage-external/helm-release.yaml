@@ -1,0 +1,86 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homepage-external
+  namespace: homepage-external
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: homepage
+      version: 11.20.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  driftDetection:
+    mode: warn
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    TZ: Europe/Amsterdam
+
+    credentials:
+      minio:
+        type: s3
+        url: "${S3_URL}"
+        bucket: "taloscluster"
+        accessKey: "${S3_ACCESKEY}"
+        secretKey: "${S3_SECRETKEY}"
+        encrKey: "${S3_ENC}"
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - host: home.${DOMAIN_0}
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+          nginx:
+            enabled: true
+            auth:
+              type: "authelia"
+              internalHost: "authelia.authelia.svc.cluster.local:9091"
+              externalHost: "auth.${DOMAIN_0}"
+              # Can be left default in most cases
+              responseHeaders: []
+        
+
+    persistence:
+      config:
+        volsync:
+          - name: config
+            type: restic
+            credentials: minio
+            dest: #VolSync Destination (Restore)
+              enabled: true
+            src: #VolSync Source (Backup)
+              enabled: true
+
+    workload:
+      main:
+        podSpec:
+          automountServiceAccountToken: true
+          containers:
+            main:
+              env:
+                HOMEPAGE_ALLOWED_HOSTS: "home.${DOMAIN_0}"
+
+    resources:
+      requests:
+        cpu: 10m
