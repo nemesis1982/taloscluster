@@ -3,4 +3,6 @@ kind: Kustomization
 resources:
   - makoto-cloud/ks.yaml
   - overseer/ks.yaml
+  - air/ks.yaml
+  - water/ks.yaml
   - namespace.yaml
