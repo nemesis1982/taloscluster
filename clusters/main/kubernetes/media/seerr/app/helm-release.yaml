@@ -41,7 +41,7 @@ spec:
         enabled: true
         ingressClassName: "external"
         hosts:
-          - host: req.${DOMAIN_0}
+          - host: request.${DOMAIN_0}
             paths:
               - path: /
                 pathType: Prefix
