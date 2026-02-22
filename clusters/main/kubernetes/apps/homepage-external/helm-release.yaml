@@ -71,6 +71,71 @@ spec:
               enabled: true
             src: #VolSync Source (Backup)
               enabled: true
+    configmap:
+      config:
+        enabled: true
+        data:
+          # https://gethomepage.dev/configs/custom-css-js/
+          custom.js: ""
+          custom.css: ""
+          kubernetes.yaml: |
+            ---
+            # For configuration options and examples, please see:
+            # https://gethomepage.dev/configs/kubernetes/
+
+            mode: disabled
+          settings.yaml: |
+            ---
+            # For configuration options and examples, please see:
+            # https://gethomepage.dev/configs/
+
+            providers:
+              openweathermap: openweathermapapikey
+              weatherapi: weatherapiapikey
+          widgets.yaml: |
+            ---
+            # For configuration options and examples, please see:
+            # https://gethomepage.dev/widgets/
+
+            - resources:
+                cpu: true
+                memory: true
+                disk: /
+
+            - search:
+                provider: duckduckgo
+                target: _blank
+
+          services.yaml: |
+            ---
+            # For configuration options and examples, please see:
+            # https://gethomepage.dev/configs/services/
+
+            - All:
+              - Seerr:
+                href: https://request.riptide.live/
+                description: Request your favorite movies and series
+          bookmarks.yaml: |
+            ---
+            # For configuration options and examples, please see:
+            # https://gethomepage.dev/configs/bookmarks/
+
+            - Riptide:
+              - Anouncements:
+                - abbr: AN
+                  icon: https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://discord.com&size=32
+                  href: https://discord.com/channels/1312397984155308102/1312418017560367154
+                  description: \"Anouncements\"
+              - Requests:
+                - abbr: RQ
+                  icon: https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://discord.com&size=32
+                  href: https://discord.com/channels/1312397984155308102/1312405795068969010
+                  description: \"Requests\"
+              - Requests:
+                - abbr: ER
+                  icon: https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://discord.com&size=32
+                  href: https://discord.com/channels/1312397984155308102/1312409389696811108
+                  description: \"Errors\"
 
     workload:
       main:
