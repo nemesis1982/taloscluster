@@ -41,6 +41,7 @@ data:
       rules:
         - domain:
             - "home.${DOMAIN_0}"
+            - "speed.${DOMAIN_0}"
           policy: one_factor
           subject: "group:riptide_all"
     identity_providers:
