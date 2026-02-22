@@ -50,4 +50,23 @@ spec:
             widget:
               custom:
                 key: "librespeed.${DOMAIN_0}"
+      extern:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - host: speed.${DOMAIN_0}
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+          nginx:
+            enabled: true
+            auth:
+              type: "authelia"
+              internalHost: "authelia.authelia.svc.cluster.local:9091"
+              externalHost: "auth.${DOMAIN_0}"
+              # Can be left default in most cases
+              responseHeaders: []
+      
+
     # Add here your chart specific values
