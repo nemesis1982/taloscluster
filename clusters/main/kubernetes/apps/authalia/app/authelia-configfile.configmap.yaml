@@ -40,7 +40,7 @@ data:
       default_policy: 'deny'
       rules:
         - domain:
-            - "home.${DOMAIN_0}
+            - "home.${DOMAIN_0}"
           policy: one_factor
           subject: "group:riptide_all"
     identity_providers:
