@@ -40,14 +40,9 @@ data:
       default_policy: 'deny'
       rules:
         - domain:
-            - "bluemap.${DOMAIN_0}"
-            - "dynmap.${DOMAIN_0}"
+            - "home.${DOMAIN_0}
           policy: one_factor
-          subject: "group:minecraft"
-        - domain:
-            - "status.${DOMAIN_0}"
-          policy: one_factor
-          subject: "group:apps"
+          subject: "group:riptide_all"
     identity_providers:
       oidc:
         hmac_secret: {{ secret "/config/secret/hmac_secret" }}
