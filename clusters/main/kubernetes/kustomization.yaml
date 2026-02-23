@@ -3,10 +3,11 @@ kind: Kustomization
 resources:
   - apps
   - core
+  - external
   - flux-entry.yaml
   - flux-system
   - kube-system
-  - networking
-  - system
-  - external
   - media
+  - networking
+  - nfs-pvc
+  - system

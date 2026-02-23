@@ -75,10 +75,10 @@ spec:
             enabled: true
             trigger:
               schedule: 30 0 * * *
-#      media:
-#        enabled: true
-#        existingClaim: media-nfs-pvc
-#        mountPath: /Media
+      media:
+        enabled: true
+        existingClaim: media-nfs-pvc
+        mountPath: /riptide
     workload:
       main:
         podSpec:
