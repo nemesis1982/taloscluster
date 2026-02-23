@@ -9,5 +9,4 @@ resources:
   - kube-system
   - media
   - networking
-  - nfs-pv
   - system
