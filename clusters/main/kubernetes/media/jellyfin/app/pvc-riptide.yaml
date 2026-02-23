@@ -6,7 +6,7 @@ metadata:
 spec:
   storageClassName: riptide-nfs
   capacity:
-    storage: 1Mi
+    storage: 2Mi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
