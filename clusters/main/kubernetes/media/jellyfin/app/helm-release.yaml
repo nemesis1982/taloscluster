@@ -73,7 +73,7 @@ spec:
             enabled: true
       media:
         enabled: true
-        existingClaim: media-nfs-pvc
+        existingClaim: riptide-nfs-pvc
         mountPath: /riptide
     workload:
       main:

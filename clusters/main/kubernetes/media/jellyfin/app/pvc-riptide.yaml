@@ -25,7 +25,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: riptide-nfs-pv
+  name: riptide-nfs-pvc
   namespace: jellyfin
 spec:
   storageClassName: riptide-nfs
