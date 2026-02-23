@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - helm-release.yaml
   - namespace.yaml
-  - pvc-ssdsafe-riptide.yaml
+  - pvc-riptide.yaml  - ssdsafe-riptide.yaml

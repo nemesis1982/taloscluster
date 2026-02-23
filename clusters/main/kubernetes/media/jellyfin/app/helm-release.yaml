@@ -71,10 +71,10 @@ spec:
             enabled: true
           src:
             enabled: true
-      media:
+      ssdsafe:
         enabled: true
-        existingClaim: riptide-nfs-pvc
-        mountPath: /riptide
+        existingClaim: ssdsafe-riptide-nfs-pvc
+        mountPath: /riptide/ssdsafe
     workload:
       main:
         podSpec:

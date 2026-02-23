@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ssdsafe-riptide-nfs-pvc
+  namespace: jellyfin
+spec:
+  storageClassName: ssdsafe-riptide-nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
