@@ -48,6 +48,15 @@ spec:
             certificateIssuer: domain-1-le-prod
         hosts:
           - host: jellyfin.${DOMAIN_0}
+      extern:
+        enabled: true
+        ingressClassName: external
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-1-le-prod
+        hosts:
+          - host: jelly.${DOMAIN_0}
     resources:
       limits:
         cpu: 8000m
@@ -77,6 +86,24 @@ spec:
         server: ${NFS_IP}
         path: ${NFS_PATH_SSDSAFE_RIPTIDE}
         mountPath: /riptide/ssdsafe
+      videosafe:
+        enabled: true
+        type: nfs
+        server: ${NFS_IP}
+        path: ${NFS_PATH_VIDEOSAFE_RIPTIDE}
+        mountPath: /riptide/videosafe
+      videounsafe:
+        enabled: true
+        type: nfs
+        server: ${NFS_IP}
+        path: ${NFS_PATH_VIDEOUNSAFE_RIPTIDE}
+        mountPath: /riptide/videounsafe
+      videounsafe2:
+        enabled: true
+        type: nfs
+        server: ${NFS_IP}
+        path: ${NFS_PATH_VIDEOUNSAFE2_RIPTIDE}
+        mountPath: /riptide/videounsafe2
     workload:
       main:
         podSpec:
