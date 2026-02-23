@@ -73,7 +73,9 @@ spec:
             enabled: true
       ssdsafe:
         enabled: true
-        existingClaim: ssdsafe-riptide-nfs-pvc
+        type: nfs
+        server: ${NFS_IP}
+        path: ${NFS_PATH_SSDSAFE_RIPTIDE}
         mountPath: /riptide/ssdsafe
     workload:
       main:
