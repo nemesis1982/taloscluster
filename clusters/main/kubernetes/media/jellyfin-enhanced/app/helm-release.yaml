@@ -50,7 +50,7 @@ spec:
           - host: jelplus.${DOMAIN_0}
     resources:
       limits:
-        cpu: 10000m
+        cpu: 8000m
         memory: 16Gi
     persistence:
       config:
@@ -106,4 +106,4 @@ spec:
                 JELLYFIN_LOG_DIR: /logs
                 JELLYFIN_CACHE_DIR: /cache
     autodiscovery:
-      enabled: true
+      enabled: false
