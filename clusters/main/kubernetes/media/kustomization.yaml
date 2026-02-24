@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - seerr/ks.yaml
   - jellyfin/ks.yaml
+  - jellyfin-enhanced/ks.yaml
