@@ -115,4 +115,4 @@ spec:
                 JELLYFIN_LOG_DIR: /logs
                 JELLYFIN_CACHE_DIR: /cache
     autodiscovery:
-      enabled: true
+      enabled: false
