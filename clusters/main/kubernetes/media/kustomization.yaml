@@ -5,3 +5,4 @@ resources:
   - jellyfin-enhanced/ks.yaml
   - seerr/ks.yaml
   - seerr-jellyfin/ks.yaml
+  - watcher/ks.yaml
