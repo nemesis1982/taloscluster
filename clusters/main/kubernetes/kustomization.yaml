@@ -9,5 +9,5 @@ resources:
   - kube-system
   - media
   - networking
-  - Observability
+  - observability
   - system
