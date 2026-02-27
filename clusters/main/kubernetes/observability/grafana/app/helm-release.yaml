@@ -73,7 +73,7 @@ spec:
               custom:
                 version: "2"
                 username: "admin"
-                password: "testpassword"
+                password: "${GFAFANA_ADMIN_PASSWORD}"
 
     cnpg:
       main:
