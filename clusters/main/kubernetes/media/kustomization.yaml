@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - jellyfin/ks.yaml
   - jellyfin-enhanced/ks.yaml
+  - plex-backup/ks.yaml
   - seerr/ks.yaml
   - seerr-jellyfin/ks.yaml
   - watcher/ks.yaml
