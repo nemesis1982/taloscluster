@@ -56,7 +56,7 @@ data:
             default_policy: 'deny'
             rules:
               - policy: 'one_factor'
-                subject: 'group:apps'
+                subject: 'group:riptide_admin'
         clients:
           - client_id: 'guacamole'
             client_name: 'Apache Guacamole'
