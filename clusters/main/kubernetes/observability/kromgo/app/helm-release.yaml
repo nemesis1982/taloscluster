@@ -35,6 +35,15 @@ spec:
     ingress:
       main:
         enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: krom.${DOMAIN_0}
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-1-le-prod
+      external:
+        enabled: true
         ingressClassName: external
         hosts:
           - host: kromgo.${DOMAIN_0}
