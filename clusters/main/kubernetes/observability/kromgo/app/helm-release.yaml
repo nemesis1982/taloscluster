@@ -46,7 +46,7 @@ spec:
         enabled: true
         ingressClassName: external
         hosts:
-          - host: kromg.${DOMAIN_0}
+          - host: kromgo.${DOMAIN_0}
         integrations:
           certManager:
             enabled: true
