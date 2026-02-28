@@ -38,22 +38,22 @@ spec:
           resources:
             limits:
               truecharts.org/tun: 1
-        killSwitch: true
-        excludedNetworks_IPv4:
-          - "192.168.0.0/24"
-          - "10.10.0.0/16"
-          - "172.0.0.0/8"
-        excludedNetworks_IPv6: []
-        env:
-          VPN_SERVICE_PROVIDER: "protonvpn"
-          VPN_TYPE: "openvpn"
-          OPENVPN_USER: "${OPEN_VPN_USER}"
-          OPENVPN_PASSWORD: "${OPEN_VPN_PASSWORD}"
-          VPN_PORT_FORWARDING: true
-          PORT_FORWARD_ONLY: true
-          FIREWALL_INPUT_PORTS: 10095,8000
-          SERVER_COUNTRIES: Switzerland
-          TOR_ONLY: true
+          killSwitch: true
+          excludedNetworks_IPv4:
+            - "192.168.0.0/24"
+            - "10.10.0.0/16"
+            - "172.0.0.0/8"
+          excludedNetworks_IPv6: []
+          env:
+            VPN_SERVICE_PROVIDER: "protonvpn"
+            VPN_TYPE: "openvpn"
+            OPENVPN_USER: "${OPEN_VPN_USER}"
+            OPENVPN_PASSWORD: "${OPEN_VPN_PASSWORD}"
+            VPN_PORT_FORWARDING: true
+            PORT_FORWARD_ONLY: true
+            FIREWALL_INPUT_PORTS: 10095,8000
+            SERVER_COUNTRIES: Switzerland
+            TOR_ONLY: true
     ingress:
       main:
         enabled: true
