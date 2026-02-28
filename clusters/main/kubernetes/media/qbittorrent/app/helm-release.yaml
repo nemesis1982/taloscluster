@@ -32,8 +32,12 @@ spec:
       QBT_USERNAME: "${QBIT_ADMIN_USER}"
       QBT_PASSWORD: "${QBIT_ADMIN_PASSWORD}"
     addons:
-      vpn:
-        type: gluetun
+      gluetun:
+        enabled: true
+        container:
+          resources:
+            limits:
+              truecharts.org/tun: 1
         killSwitch: true
         excludedNetworks_IPv4:
           - "192.168.0.0/24"

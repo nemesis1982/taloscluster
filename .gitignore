@@ -11,3 +11,5 @@ sopssecret*
 mounts/
 private.key
 *.log
+clusters/main/kubernetes/media/qbittorrent/app/helm-releas-alfi.yaml
+clusters/main/kubernetes/media/qbittorrent/app/helm-release-xstar97.yaml
