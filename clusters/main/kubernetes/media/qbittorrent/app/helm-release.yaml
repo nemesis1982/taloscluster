@@ -53,7 +53,7 @@ spec:
             PORT_FORWARD_ONLY: true
             FIREWALL_INPUT_PORTS: 10095,8000
             SERVER_COUNTRIES: Switzerland
-            TOR_ONLY: true
+            TOR_ONLY: false
     ingress:
       main:
         enabled: true
