@@ -7,3 +7,4 @@ resources:
   - seerr/ks.yaml
   - seerr-jellyfin/ks.yaml
   - watcher/ks.yaml
+  - qbittorrent/ks.yaml
