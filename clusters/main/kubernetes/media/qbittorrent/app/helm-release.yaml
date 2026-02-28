@@ -48,7 +48,7 @@ spec:
           VPN_SERVICE_PROVIDER: "protonvpn"
           VPN_TYPE: "openvpn"
           OPENVPN_USER: "${OPEN_VPN_USER}"
-          OPENVPN_PASSWORD: "${OPEN_VPN_PASS}"
+          OPENVPN_PASSWORD: "${OPEN_VPN_PASSWORD}"
           VPN_PORT_FORWARDING: true
           PORT_FORWARD_ONLY: true
           FIREWALL_INPUT_PORTS: 10095,8000
