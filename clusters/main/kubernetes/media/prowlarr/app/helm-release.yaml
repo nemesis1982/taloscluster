@@ -34,9 +34,6 @@ spec:
         ingressClassName: internal
         hosts:
           - host: prowlarr.${DOMAIN_0}
-            paths:
-              - path: /
-                pathType: Prefix
         integrations:
           homepage:
             enabled: true
