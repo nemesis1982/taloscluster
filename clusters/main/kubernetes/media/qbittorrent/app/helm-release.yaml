@@ -40,7 +40,7 @@ spec:
               truecharts.org/tun: 1
           killSwitch: true
           excludedNetworks_IPv4:
-            - "192.168.0.0/24"
+            - "192.168.0.0/16"
             - "10.10.0.0/16"
             - "172.0.0.0/8"
           excludedNetworks_IPv6: []
@@ -57,8 +57,8 @@ spec:
             VPN_PORT_FORWARDING_PROVIDER: "protonvpn"
             HEALTH_SUCCESS_WAIT_DURATION: "10s"
             HEALTH_VPN_DURATION_ADDITION: "31536000s"
-#            FIREWALL: "on"
-#            FIREWALL_OUTBOUND_SUBNETS: "10.0.0.0/24"
+            FIREWALL: "on"
+            FIREWALL_OUTBOUND_SUBNETS: "192.168.0.0/16,10.10.0.0/16,172.0.0.0/8"
 #            HTTPPROXY: "on"
             VPN_TYPE: "wireguard"
             VPN_SERVICE_PROVIDER: "custom"
@@ -69,6 +69,7 @@ spec:
             WIREGUARD_ADDRESSES: "${WIREGUARD_ADDRESSES}"
             WIREGUARD_MTU: 1390
             WIREGUARD_PERSISTENT_KEEPALIVE_INTERVAL: 25s
+            WIREGUARD_ALLOWED_IPS: 0.0.0.0/0
     ingress:
       main:
         enabled: true
