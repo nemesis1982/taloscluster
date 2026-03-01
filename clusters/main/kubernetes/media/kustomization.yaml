@@ -4,7 +4,7 @@ resources:
   - jellyfin/ks.yaml
   - jellyfin-enhanced/ks.yaml
   - plex-backup/ks.yaml
-  - prowllar/ks.yaml
+  - prowlarr/ks.yaml
   - qbittorrent/ks.yaml
   - seerr/ks.yaml
   - seerr-jellyfin/ks.yaml
