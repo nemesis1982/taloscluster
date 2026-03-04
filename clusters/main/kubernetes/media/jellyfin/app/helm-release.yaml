@@ -98,12 +98,6 @@ spec:
         server: ${NFS_IP}
         path: ${NFS_PATH_VIDEOUNSAFE_RIPTIDE}
         mountPath: /riptide/videounsafe
-      videounsafe2:
-        enabled: true
-        type: nfs
-        server: ${NFS_IP}
-        path: ${NFS_PATH_VIDEOUNSAFE2_RIPTIDE}
-        mountPath: /riptide/videounsafe2
     workload:
       main:
         podSpec:
