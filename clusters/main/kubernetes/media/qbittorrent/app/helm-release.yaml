@@ -33,7 +33,7 @@ spec:
       QBT_PASSWORD: "${QBIT_ADMIN_PASSWORD}"
     gluetunImage:
       repository: oci.trueforge.org/containerforge/gluetun
-      tag: v3.41.1
+      tag: v3.41
       pullPolicy: IfNotPresent
     configmap:
       gluetun-auth-config:
