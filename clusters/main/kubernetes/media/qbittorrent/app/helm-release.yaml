@@ -31,6 +31,18 @@ spec:
       enabled: true
       QBT_USERNAME: "${QBIT_ADMIN_USER}"
       QBT_PASSWORD: "${QBIT_ADMIN_PASSWORD}"
+    configmap:
+      gluetun-auth-config:
+        enabled: false
+        data:
+          config.toml: >-
+            [[roles]]
+
+            name = "qbittorrent"
+
+            routes = ["GET /v1/vpn/status","GET /v1/publicip/ip","GET /v1/portforwarded"]
+
+            auth = "none"
     addons:
       gluetun:
         enabled: true
@@ -98,6 +110,14 @@ spec:
               enabled: true
             src:
               enabled: true
+      gluetun-auth-config:
+        enabled: true
+        type: configmap
+        mountPath: /gluetun/auth/config.toml
+        objectName: gluetun-auth-config
+        readOnly: true
+        subPath: config.toml
+        targetSelectAll: true
       download:
         enabled: true
         type: nfs
