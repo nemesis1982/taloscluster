@@ -33,7 +33,7 @@ spec:
       QBT_PASSWORD: "${QBIT_ADMIN_PASSWORD}"
     configmap:
       gluetun-auth-config:
-        enabled: false
+        enabled: true
         data:
           config.toml: >-
             [[roles]]
