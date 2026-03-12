@@ -6,7 +6,6 @@ resources:
   - plex-backup/ks.yaml
   - prowlarr/ks.yaml
   - qbittorrent/ks.yaml
-  - requestrr/ks.yaml
-  - seerr/ks.yaml
-  - seerr-jellyfin/ks.yaml
   - watcher/ks.yaml
+  # Sub Folders
+  - requests
