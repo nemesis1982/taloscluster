@@ -7,7 +7,7 @@ resources:
   - flux-entry.yaml
   - flux-system
   - kube-system
-#  - management
+  - management
   - media
   - networking
   - observability

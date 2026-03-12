@@ -4,5 +4,5 @@ resources:
   - namespace.yaml
   - helm-release.yaml
   - ingress.yaml
-  - minio.backup.secret.yaml
+#  - minio.backup.secret.yaml
   - volumeSnapshotClass.yaml
