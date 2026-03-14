@@ -6,3 +6,4 @@ resources:
   - ingress.yaml
 #  - minio.backup.secret.yaml
   - volumeSnapshotClass.yaml
+  - jobs
