@@ -34,7 +34,7 @@ spec:
         enabled: true
         ingressClassName: internal
         hosts:
-          - host: it-tools.${DOMAIN_01}
+          - host: it-tools.${DOMAIN_0}
         integrations:
           certManager:
             enabled: true
