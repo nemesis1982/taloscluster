@@ -7,3 +7,4 @@ resources:
   - homepage-external
   - lldap/ks.yaml
   - authalia/ks.yaml
+  - registry/ks.yaml
