@@ -51,7 +51,3 @@ spec:
         type: nfs
         server: ${NFS_IP}
         path: ${REGISTRY_NFS_PATH}
-
-    resources:
-      requests:
-        cpu: 10m
