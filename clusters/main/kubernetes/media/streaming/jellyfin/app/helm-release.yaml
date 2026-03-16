@@ -45,7 +45,7 @@ spec:
         integrations:
           certManager:
             enabled: true
-            certificateIssuer: domain-1-le-prod
+            certificateIssuer: domain-0-le-prod
         hosts:
           - host: jellyfin.${DOMAIN_0}
       extern:
@@ -54,7 +54,7 @@ spec:
         integrations:
           certManager:
             enabled: true
-            certificateIssuer: domain-1-le-prod
+            certificateIssuer: domain-0-le-prod
         hosts:
           - host: jelly.${DOMAIN_0}
     resources:
