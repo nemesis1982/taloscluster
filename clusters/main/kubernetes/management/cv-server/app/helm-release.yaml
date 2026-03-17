@@ -64,8 +64,8 @@ spec:
             main:
               probes:
                 liveness:
-                  path: "/ping"
+                  path: "/cv/data"
                 readiness:
-                  path: "/ping"
+                  path: "/cv/data"
                 startup:
-                  path: "/ping"
+                  path: "/cv/data"
