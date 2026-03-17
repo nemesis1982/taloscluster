@@ -4,4 +4,5 @@ resources:
   - it-tools/ks.yaml
   - pgadmin/ks.yaml
   - servermanager/ks.yaml
+  - cv-server/ks.yaml
 #  - unifi/ks.yaml
