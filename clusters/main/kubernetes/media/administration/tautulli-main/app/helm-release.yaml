@@ -1,0 +1,57 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tautulli-main
+  namespace: tautulli-main
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: tautulli
+      version: 21.18.2
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  timeout: 20m
+  values:
+    global:
+      stopAll: false
+    credentials:
+      minio:
+        type: s3
+        url: "${S3_URL}"
+        bucket: "taloscluster"
+        accessKey: "${S3_ACCESKEY}"
+        secretKey: "${S3_SECRETKEY}"
+        encrKey: "${S3_ENC}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+        hosts:
+          - host: tautulli.${DOMAIN_0}
+    persistence:
+      config:
+        volsync:
+        - name: config
+          type: restic
+          credentials: minio
+          dest:
+            enabled: true
+          src:
+            enabled: true
