@@ -9,7 +9,7 @@ resources:
   - flux-system
   - kube-system
 #  - management
-#  - media
+  - media
   - networking
 #  - observability
   - system
