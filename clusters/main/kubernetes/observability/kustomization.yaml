@@ -4,4 +4,4 @@ resources:
   - grafana/ks.yaml
   - grafana-alloy/ks.yaml
   - grafana-loki/ks.yaml
-  - kromgo/ks.yaml
+#  - kromgo/ks.yaml
