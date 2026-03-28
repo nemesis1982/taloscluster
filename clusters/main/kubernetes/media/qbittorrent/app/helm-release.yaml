@@ -123,12 +123,6 @@ spec:
         readOnly: true
         subPath: config.toml
         targetSelectAll: true
-      download:
-        enabled: true
-        type: nfs
-        path: ${NFS_2_PATH_DOWNLOAD}
-        mountPath: /download
-        server: ${NFS_2_IP}
       ssdsafe:
         enabled: true
         type: nfs

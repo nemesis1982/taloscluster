@@ -4,6 +4,6 @@ resources:
   - qbittorrent/ks.yaml
  # - watcher/ks.yaml
   # Sub Folders
- # - administration
+  - administration
  # - requests
- # - streaming
+  - streaming
