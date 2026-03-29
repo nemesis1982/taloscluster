@@ -5,5 +5,5 @@ resources:
  # - watcher/ks.yaml
   # Sub Folders
   - administration
- # - requests
+  - requests
   - streaming
