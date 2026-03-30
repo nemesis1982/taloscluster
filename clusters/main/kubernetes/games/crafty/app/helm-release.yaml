@@ -26,24 +26,6 @@ spec:
   timeout: 20m
   values:
     service:
-      main:
-        type: LoadBalancer
-        loadBalancerIP: ${CRAFTY_IP}
-        integrations:
-          metallb:
-            enabled: true
-      redirects:
-        type: LoadBalancer
-        loadBalancerIP: ${CRAFTY_IP}
-        integrations:
-          metallb:
-            enabled: true
-      minecraft:
-        type: LoadBalancer
-        loadBalancerIP: ${CRAFTY_IP}
-        integrations:
-          metallb:
-            enabled: true
       bedrock:
         type: LoadBalancer
         loadBalancerIP: ${CRAFTY_IP}
