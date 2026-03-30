@@ -32,6 +32,160 @@ spec:
         integrations:
           metallb:
             enabled: true
+      redirects:
+        type: LoadBalancer
+        loadBalancerIP: ${CRAFTY_IP}
+        integrations:
+          metallb:
+            enabled: true
+      minecraft:
+        type: LoadBalancer
+        loadBalancerIP: ${CRAFTY_IP}
+        integrations:
+          metallb:
+            enabled: true
+      bedrock:
+        type: LoadBalancer
+        loadBalancerIP: ${CRAFTY_IP}
+        integrations:
+          metallb:
+            enabled: true
+        ports:
+          bedrock33:
+            enabled:
+            port: 19133
+            protocol: udp
+            targetPort: 19133
+          bedrock34:
+            enabled:
+            port: 19134
+            protocol: udp
+            targetPort: 19134
+          bedrock35:
+            enabled:
+            port: 19135
+            protocol: udp
+            targetPort: 19135
+          bedrock36:
+            enabled:
+            port: 19136
+            protocol: udp
+            targetPort: 19136
+          bedrock37:
+            enabled:
+            port: 19137
+            protocol: udp
+            targetPort: 19137
+          bedrock38:
+            enabled:
+            port: 19138
+            protocol: udp
+            targetPort: 19138
+          bedrock39:
+            enabled:
+            port: 19139
+            protocol: udp
+            targetPort: 19139
+          bedrock40:
+            enabled:
+            port: 19140
+            protocol: udp
+            targetPort: 19140
+          bedrock41:
+            enabled:
+            port: 19141
+            protocol: udp
+            targetPort: 19141
+          bedrock42:
+            enabled:
+            port: 19142
+            protocol: udp
+            targetPort: 19142
+          bedrock43:
+            enabled:
+            port: 19143
+            protocol: udp
+            targetPort: 19143
+          bedrock44:
+            enabled:
+            port: 19144
+            protocol: udp
+            targetPort: 19144
+          bedrock45:
+            enabled:
+            port: 19145
+            protocol: udp
+            targetPort: 19145
+          bedrock46:
+            enabled:
+            port: 19146
+            protocol: udp
+            targetPort: 19146
+          bedrock47:
+            enabled:
+            port: 19147
+            protocol: udp
+            targetPort: 19147
+          bedrock48:
+            enabled:
+            port: 19148
+            protocol: udp
+            targetPort: 19148
+          bedrock49:
+            enabled:
+            port: 19149
+            protocol: udp
+            targetPort: 19149
+          bedrock50:
+            enabled:
+            port: 19150
+            protocol: udp
+            targetPort: 19150
+          bedrock51:
+            enabled:
+            port: 19151
+            protocol: udp
+            targetPort: 19151
+          bedrock52:
+            enabled:
+            port: 19152
+            protocol: udp
+            targetPort: 19152
+          bedrock53:
+            enabled:
+            port: 19153
+            protocol: udp
+            targetPort: 19153
+          bedrock54:
+            enabled:
+            port: 19154
+            protocol: udp
+            targetPort: 19154
+          bedrock55:
+            enabled:
+            port: 19155
+            protocol: udp
+            targetPort: 19155
+          bedrock56:
+            enabled:
+            port: 19156
+            protocol: udp
+            targetPort: 19156
+          bedrock57:
+            enabled:
+            port: 19157
+            protocol: udp
+            targetPort: 19157
+          bedrock58:
+            enabled:
+            port: 19158
+            protocol: udp
+            targetPort: 19158
+          bedrock59:
+            enabled:
+            port: 19159
+            protocol: udp
+            targetPort: 19159
 
     ingress:
       main:
