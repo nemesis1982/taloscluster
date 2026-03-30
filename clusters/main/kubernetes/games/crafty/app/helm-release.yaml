@@ -26,6 +26,43 @@ spec:
   timeout: 20m
   values:
     service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${CRAFTY_IP}
+        integrations:
+          metallb:
+            enabled: true
+        enabled: true
+        ports:
+          main:
+            port: 10586
+            protocol: https
+            targetPort: 8443
+      redirects:
+        type: LoadBalancer
+        loadBalancerIP: ${CRAFTY_IP}
+        integrations:
+          metallb:
+            enabled: true
+        enabled: true
+        ports:
+          redirects:
+            enabled: true
+            port: 10587
+            protocol: https
+            targetPort: 8000
+      minecraft:
+        type: LoadBalancer
+        loadBalancerIP: ${CRAFTY_IP}
+        integrations:
+          metallb:
+            enabled: true
+        enabled: true
+        ports:
+          minecraft:
+            enabled: true
+            port: 25565
+            targetPort: 25565
       bedrock:
         type: LoadBalancer
         loadBalancerIP: ${CRAFTY_IP}
