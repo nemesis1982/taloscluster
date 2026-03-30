@@ -34,137 +34,137 @@ spec:
             enabled: true
         ports:
           bedrock33:
-            enabled:
+            enabled: true
             port: 19133
             protocol: udp
             targetPort: 19133
           bedrock34:
-            enabled:
+            enabled: true
             port: 19134
             protocol: udp
             targetPort: 19134
           bedrock35:
-            enabled:
+            enabled: true
             port: 19135
             protocol: udp
             targetPort: 19135
           bedrock36:
-            enabled:
+            enabled: true
             port: 19136
             protocol: udp
             targetPort: 19136
           bedrock37:
-            enabled:
+            enabled: true
             port: 19137
             protocol: udp
             targetPort: 19137
           bedrock38:
-            enabled:
+            enabled: true
             port: 19138
             protocol: udp
             targetPort: 19138
           bedrock39:
-            enabled:
+            enabled: true
             port: 19139
             protocol: udp
             targetPort: 19139
           bedrock40:
-            enabled:
+            enabled: true
             port: 19140
             protocol: udp
             targetPort: 19140
           bedrock41:
-            enabled:
+            enabled: true
             port: 19141
             protocol: udp
             targetPort: 19141
           bedrock42:
-            enabled:
+            enabled: true
             port: 19142
             protocol: udp
             targetPort: 19142
           bedrock43:
-            enabled:
+            enabled: true
             port: 19143
             protocol: udp
             targetPort: 19143
           bedrock44:
-            enabled:
+            enabled: true
             port: 19144
             protocol: udp
             targetPort: 19144
           bedrock45:
-            enabled:
+            enabled: true
             port: 19145
             protocol: udp
             targetPort: 19145
           bedrock46:
-            enabled:
+            enabled: true
             port: 19146
             protocol: udp
             targetPort: 19146
           bedrock47:
-            enabled:
+            enabled: true
             port: 19147
             protocol: udp
             targetPort: 19147
           bedrock48:
-            enabled:
+            enabled: true
             port: 19148
             protocol: udp
             targetPort: 19148
           bedrock49:
-            enabled:
+            enabled: true
             port: 19149
             protocol: udp
             targetPort: 19149
           bedrock50:
-            enabled:
+            enabled: true
             port: 19150
             protocol: udp
             targetPort: 19150
           bedrock51:
-            enabled:
+            enabled: true
             port: 19151
             protocol: udp
             targetPort: 19151
           bedrock52:
-            enabled:
+            enabled: true
             port: 19152
             protocol: udp
             targetPort: 19152
           bedrock53:
-            enabled:
+            enabled: true
             port: 19153
             protocol: udp
             targetPort: 19153
           bedrock54:
-            enabled:
+            enabled: true
             port: 19154
             protocol: udp
             targetPort: 19154
           bedrock55:
-            enabled:
+            enabled: true
             port: 19155
             protocol: udp
             targetPort: 19155
           bedrock56:
-            enabled:
+            enabled: true
             port: 19156
             protocol: udp
             targetPort: 19156
           bedrock57:
-            enabled:
+            enabled: true
             port: 19157
             protocol: udp
             targetPort: 19157
           bedrock58:
-            enabled:
+            enabled: true
             port: 19158
             protocol: udp
             targetPort: 19158
           bedrock59:
-            enabled:
+            enabled: true
             port: 19159
             protocol: udp
             targetPort: 19159
