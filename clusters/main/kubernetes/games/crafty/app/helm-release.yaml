@@ -25,6 +25,14 @@ spec:
       retries: 3
   timeout: 20m
   values:
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: ${CRAFTY_IP}
+        integrations:
+          metallb:
+            enabled: true
+
     ingress:
       main:
         enabled: true
