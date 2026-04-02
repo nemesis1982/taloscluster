@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ext-water
+  name: ext-truenas
   namespace: external-services
 spec:
   interval: 15m
@@ -39,15 +39,15 @@ spec:
         # useSlice: true
         ports:
           main:
-            protocol: http
-            port: 8989
+            protocol: https
+            port: 443
 
     ingress:
       main:
         enabled: true
         ingressClassName: internal
         hosts:
-          - host: water.${DOMAIN_0}
+          - host: truenas.${DOMAIN_0}
         integrations:
           certManager:
             enabled: true

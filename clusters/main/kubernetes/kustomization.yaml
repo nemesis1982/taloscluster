@@ -4,7 +4,7 @@ resources:
   - apps
 #  - cloud
   - core
-#  - external
+  - external
   - flux-entry.yaml
   - flux-system
   - games

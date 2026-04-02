@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ext-air
+  name: ext-opnsense
   namespace: external-services
 spec:
   interval: 15m
@@ -39,15 +39,15 @@ spec:
         # useSlice: true
         ports:
           main:
-            protocol: http
-            port: 7878
+            protocol: https
+            port: 8443
 
     ingress:
       main:
         enabled: true
         ingressClassName: internal
         hosts:
-          - host: air.${DOMAIN_0}
+          - host: opnsense.${DOMAIN_0}
         integrations:
           certManager:
             enabled: true

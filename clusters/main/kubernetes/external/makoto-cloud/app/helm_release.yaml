@@ -40,7 +40,7 @@ spec:
         ports:
           main:
             protocol: http
-            port: 9001
+            port: 30027
 
     ingress:
       main:
