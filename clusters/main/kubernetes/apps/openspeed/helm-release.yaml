@@ -8,7 +8,7 @@ spec:
   interval: 15m
   chart:
     spec:
-      chart: openspeed
+      chart: openspeedtest
       version: 12.0.1
       sourceRef:
         kind: HelmRepository
