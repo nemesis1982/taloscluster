@@ -3,6 +3,8 @@ kind: Kustomization
 resources:
   - kubernetes-dashboard/ks.yaml
   - librespeed
+  - myspeed
+  - openspeed
 #  - homepage
 #  - homepage-external
 #  - lldap/ks.yaml
