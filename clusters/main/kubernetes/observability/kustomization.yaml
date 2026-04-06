@@ -4,4 +4,5 @@ resources:
   - grafana/ks.yaml
   - grafana-alloy/ks.yaml
   - grafana-loki/ks.yaml
+  - speedtests
 #  - kromgo/ks.yaml
