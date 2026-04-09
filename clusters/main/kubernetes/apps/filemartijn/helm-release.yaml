@@ -35,13 +35,23 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: external
+        ingressClassName: internal
         hosts:
           - host: filemartijn.${DOMAIN_0}
         integrations:
           certManager:
             enabled: true
             certificateIssuer: domain-0-le-prod
+      ex:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - host: filemar.${DOMAIN_0}
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+
 
     persistence:
       data:
