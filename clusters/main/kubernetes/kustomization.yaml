@@ -9,8 +9,8 @@ resources:
   - flux-system
   - games
   - kube-system
-#  - management
+  - management
   - media
   - networking
-#  - observability
+  - observability
   - system
