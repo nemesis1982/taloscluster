@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: nextcloud
-      version: 40.14.6
+      version: 43.0.15
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -46,7 +46,7 @@ spec:
             enabled: true
             certificateIssuer: domain-0-le-prod
         hosts:
-          - host: nextcloud.${DOMAIN_0}
+          - host: makoto-cloud.${DOMAIN_0}
             paths:
               - path: /
                 pathType: Prefix
@@ -66,7 +66,7 @@ spec:
             enabled: true
             certificateIssuer: domain-0-le-prod
         hosts:
-          - host: nextcloud.${DOMAIN_0}
+          - host: makoto-cloud.${DOMAIN_0}
             paths:
               - path: /collabora/browser/dist/admin
                 pathType: Prefix
@@ -74,7 +74,7 @@ spec:
       main:
         cluster:
           singleNode: true
-        mode: recovery
+        #mode: recovery   # Set to 'recovery' when recovery from S3, also change the revisions
         backups:
           enabled: true
           credentials: minio
@@ -116,8 +116,33 @@ spec:
             trigger:
               schedule: 20 1 * * *
     nextcloud:
+      # ClamAV (Anti-virus for Nextcloud, keep in mind that only scans files that Nextcloud posts to its endpoint. A Clam AV container will be deployed automatically.
+      clamav:
+        enabled: true
+        stream_max_length: 26214400
+        file_max_size: -1
+        infected_action: only_log
+      # Notify Push (Allows Nextcloud to notify clients of changes, instead of clients having to poll. A Notify Push container will be deployed automatically). This is highly recommended to keep enabled.
+      notify_push:
+        enabled: true
+      # Collabora (document editor for Nextcloud. A Collabora container will be deployed automatically.
       collabora:
         enabled: true
+        interface_mode: default
+        username: "${NEXTCLOUD_COLLABORA_USER}"
+        password: "${NEXTCLOUD_COLLABORA_PASSWORD}"
+        dictionaries:
+          - de_DE
+          - en_GB
+          - en_US
+          - el_GR
+          - es_ES
+          - fr_FR
+          - pt_BR
+          - pt_PT
+          - it
+          - nl
+          - ru
       credentials:
         initialAdminPassword: "${NEXTCLOUD_PASSWORD}"
         initialAdminUser: "${NEXTCLOUD_USER}"
