@@ -129,8 +129,8 @@ spec:
       collabora:
         enabled: true
         interface_mode: default
-        username: "${NEXTCLOUD_COLLABORA_USER}"
-        password: "${NEXTCLOUD_COLLABORA_PASSWORD}"
+        username: ${NEXTCLOUD_COLLABORA_USER}
+        password: ${NEXTCLOUD_COLLABORA_PASSWORD}
         dictionaries:
           - de_DE
           - en_GB
