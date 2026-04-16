@@ -39,7 +39,7 @@ spec:
 
     ingress:
       main:
-        enabled: false
+        enabled: true
         ingressClassName: external
         integrations:
           certManager:
