@@ -72,7 +72,7 @@ spec:
                 # User Defined
                 ROOT_URL: "http://localhost:8080"
                 # BROWSER_POLICY_ENABLED: false
-                # TRUSTED_URL: ""
+                TRUSTED_URL: "makoto-wekan.${DOMAIN_0}"
                 # LOGOUT_WITH_TIMER: false
                 # LOGOUT_IN: 0
                 # LOGOUT_ON_HOURS: 0
