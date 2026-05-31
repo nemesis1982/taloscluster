@@ -61,6 +61,13 @@ spec:
             main:
               env:
                 VITE_API_URL: http://daisybackend.${DOMAIN_0}
+              probes:
+                liveness:
+                  path: "/ping"
+                readiness:
+                  path: "/ping"
+                startup:
+                  path: "/ping"
     resources:
       limits:
         cpu: 100m
