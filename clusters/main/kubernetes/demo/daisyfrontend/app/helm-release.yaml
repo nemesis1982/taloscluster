@@ -60,7 +60,7 @@ spec:
           containers:
             main:
               env:
-                VITE_API_URL: http://daisybackend.${DOMAIN_0}
+                VITE_API_URL: https://daisybackend.${DOMAIN_0}/api
               probes:
                 liveness:
                   path: "/ping"
