@@ -51,16 +51,16 @@ spec:
           main:
             port: 3001
             targetPort: 16081
-    ingress:
-      main:
-        enabled: true
-        ingressClassName: external
-        integrations:
-          certManager:
-            enabled: true
-            certificateIssuer: domain-0-le-prod
-        hosts:
-          - host: daisybackend.${DOMAIN_0}
+    #ingress:
+    #  main:
+    #    enabled: true
+    #    ingressClassName: external
+    #    integrations:
+    #      certManager:
+    #        enabled: true
+    #        certificateIssuer: domain-0-le-prod
+    #    hosts:
+    #      - host: daisybackend.${DOMAIN_0}
     resources:
       limits:
         cpu: 100m
