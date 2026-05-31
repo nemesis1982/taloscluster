@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/daisyapp-client
-      tag: v1.1.1
+      tag: v1.2.1
       pullPolicy: IfNotPresent
     securityContext:
       container:
@@ -69,7 +69,3 @@ spec:
                   path: "/ping"
                 startup:
                   path: "/ping"
-    resources:
-      limits:
-        cpu: 100m
-        memory: 4Gi

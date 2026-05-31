@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/daisyapp-server
-      tag: v1.1.1
+      tag: v1.2.0
       pullPolicy: IfNotPresent
     securityContext:
       container:
@@ -61,10 +61,6 @@ spec:
             certificateIssuer: domain-0-le-prod
         hosts:
           - host: daisybackend.${DOMAIN_0}
-    resources:
-      limits:
-        cpu: 100m
-        memory: 4Gi
 
     persistence:
       data:
