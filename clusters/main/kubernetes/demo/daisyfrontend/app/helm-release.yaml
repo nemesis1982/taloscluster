@@ -40,8 +40,8 @@ spec:
       main:
         ports:
           main:
-            port: 80
-            targetPort: 16080
+            port: 16080
+            targetPort: 80
     ingress:
       main:
         enabled: true
