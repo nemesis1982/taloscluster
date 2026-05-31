@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - daisybackend/ks.yaml
   - daisyfrontend/ks.yaml
+  - daisyandroid/ks.yaml
