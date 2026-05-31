@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/daisyapp-server
-      tag: v1.4.0
+      tag: v1.6.1
       pullPolicy: IfNotPresent
     securityContext:
       container:
