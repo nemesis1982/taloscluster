@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/daisyapp-client
-      tag: latest
+      tag: v1.1.1
       pullPolicy: IfNotPresent
     securityContext:
       container:
@@ -61,6 +61,7 @@ spec:
             main:
               env:
                 VITE_API_URL: https://daisybackend.${DOMAIN_0}/api
+                API_UPSTREAM: https://daisybackend.${DOMAIN_0}
               probes:
                 liveness:
                   path: "/ping"
