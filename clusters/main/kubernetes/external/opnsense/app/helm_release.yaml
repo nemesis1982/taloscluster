@@ -33,8 +33,6 @@ spec:
     TZ: Europe/Amsterdam
 
     service:
-      annotations:
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       main:
         type: ExternalIP
         externalIP: "192.168.20.15"
@@ -48,6 +46,8 @@ spec:
       main:
         enabled: true
         ingressClassName: internal
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         hosts:
           - host: opnsense.${DOMAIN_0}
         integrations:
