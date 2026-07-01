@@ -1,0 +1,54 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ext-mail
+  namespace: external-services
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: external-service
+      version: 16.15.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  driftDetection:
+    mode: warn
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    TZ: Europe/Amsterdam
+
+    service:
+      main:
+        type: ExternalIP
+        externalIP: "192.168.20.8"
+        # useSlice: true
+        ports:
+          main:
+            protocol: https
+            port: 443
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - host: mail.${DOMAIN_1}
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-1-le-prod

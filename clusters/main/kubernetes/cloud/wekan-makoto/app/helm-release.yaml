@@ -75,9 +75,9 @@ spec:
               env:
                 WRITABLE_PATH: "/data"
                 # User Defined
-                ROOT_URL: "http://localhost:8080"
+                ROOT_URL: "https://makoto-wekan.${DOMAIN_0}"
                 # BROWSER_POLICY_ENABLED: false
-                TRUSTED_URL: "makoto-wekan.${DOMAIN_0}"
+                TRUSTED_URL: "https://makoto-wekan.${DOMAIN_0}"
                 # LOGOUT_WITH_TIMER: false
                 # LOGOUT_IN: 0
                 # LOGOUT_ON_HOURS: 0
