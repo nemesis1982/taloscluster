@@ -4,6 +4,8 @@ kind: HelmRelease
 metadata:
   name: ext-opnsense
   namespace: external-services
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   interval: 15m
   chart:
@@ -34,8 +36,6 @@ spec:
 
     service:
       main:
-        annotations:
-          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         type: ExternalIP
         externalIP: "192.168.20.15"
         # useSlice: true
