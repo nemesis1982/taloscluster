@@ -5,4 +5,5 @@ resources:
 #  - pgadmin/ks.yaml
   - servermanager/ks.yaml
   - cv-server/ks.yaml
+  - dragonchess/ks.yaml
 #  - unifi/ks.yaml

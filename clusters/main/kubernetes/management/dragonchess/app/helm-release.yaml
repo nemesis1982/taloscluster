@@ -1,0 +1,64 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dragonchess
+  namespace: dragonchess
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 15.38.0
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  timeout: 20m
+  values:
+    image:
+      repository: registry.riptide.live/dragon-chess
+      tag: v0.0.2
+      pullPolicy: IfNotPresent
+    securityContext:
+      container:
+        readOnlyRootFilesystem: false
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+
+    service:
+      main:
+        ports:
+          main:
+            port: 9888
+            targetPort: 80
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+        hosts:
+          - host: dragonchess.${DOMAIN_0}
+
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              probes:
+                liveness:  { enabled: true, custom: true, spec: { httpGet: { path: /healthz, port: 80 }, periodSeconds: 15 } }
+                readiness: { enabled: true, custom: true, spec: { httpGet: { path: /healthz, port: 80 }, periodSeconds: 15 } }
+                startup:  { enabled: true, custom: true, spec: { httpGet: { path: /healthz, port: 80 }, periodSeconds: 15 } }  
