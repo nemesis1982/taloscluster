@@ -84,8 +84,13 @@ spec:
                   MONGODB_REPLICA_SET_KEY: d950d2b3ca562d2290cc327a3f01a6c8
                 # The bitnami image only auto-initiates the replica set on an
                 # EMPTY data dir; on a restart with persisted data mongod comes
-                # up with an uninitiated replica set and wekan cannot connect.
-                # This hook makes the init self-healing on every container start.
+                # up with an uninitiated (or stuck memberless) replica set and
+                # wekan cannot connect. This hook makes the replica set
+                # self-healing on every container start:
+                #  - NotYetInitialized        -> rs.initiate
+                #  - initiated but no primary
+                #    after ~60s (e.g. node marked REMOVED because the service
+                #    had no endpoints during boot) -> force reconfig
                 lifecycle:
                   postStart:
                     type: exec
@@ -93,18 +98,29 @@ spec:
                       - /bin/bash
                       - -c
                       - |
+                        m() { mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval "$1" 2>/dev/null; }
                         for i in $(seq 1 60); do
-                          state=$(mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet \
-                            --eval 'try { print(rs.status().myState) } catch(e) { print(e.codeName) }' 2>/dev/null | tail -1)
+                          state=$(m 'try { print(rs.status().myState) } catch(e) { print(e.codeName) }' | tail -1)
                           case "$state" in
                             1) exit 0 ;;
                             NotYetInitialized)
-                              mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet \
-                                --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"wekan-makoto-mongodb:27017"}]})' && exit 0 ;;
+                              m 'rs.initiate({_id:"rs0",members:[{_id:0,host:"wekan-makoto-mongodb:27017"}]})' ;;
+                            0|2|3|5|10|InvalidReplicaSetConfig)
+                              if [ "$i" -gt 12 ]; then
+                                m 'c = db.getSiblingDB("local").system.replset.findOne();
+                                   c.members = [{_id:0, host:"wekan-makoto-mongodb:27017"}];
+                                   rs.reconfig(c, {force:true});'
+                              fi ;;
                           esac
                           sleep 5
                         done
                         exit 0
+      # The advertised replica-set address is the service; mongod dials it at
+      # boot to identify itself. Publish the address even before the pod is
+      # Ready, otherwise the self-check fails and the node never elects itself.
+      service:
+        main:
+          publishNotReadyAddresses: true
 
     workload:
       main:
