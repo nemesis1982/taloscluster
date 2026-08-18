@@ -83,4 +83,4 @@ spec:
     mariadb:
       enabled: true
       mariadbUsername: "wp_mak_secure"
-      mariadbDatabase: "AXK3sNDJP4mJDeXExBrGCAcAwB*q-Xhgn
+      mariadbDatabase: "AXK3sNDJP4mJDeXExBrGCAcAwB*q-Xhgn"
