@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - nextcloud-makoto/ks.yaml
   - web-makoto/ks.yaml
-  - wekan-makoto/ks.yaml
+#  - wekan-makoto/ks.yaml
