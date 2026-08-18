@@ -150,6 +150,9 @@ spec:
                 # OAUTH2_ADFS_ENABLED: false
                 # --- LDAP (lldap) integration ---
                 LDAP_ENABLE: true
+                # Verbose LDAP logging while debugging login issues
+                LDAP_LOG_ENABLED: true
+                DEBUG: true
                 DEFAULT_AUTHENTICATION_METHOD: "ldap"
                 LDAP_HOST: lldap-ldap.lldap.svc.cluster.local
                 LDAP_PORT: 3890
