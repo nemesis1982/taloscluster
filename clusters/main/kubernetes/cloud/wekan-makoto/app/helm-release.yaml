@@ -66,7 +66,23 @@ spec:
       enabled: true
       mongodbUsername: wekan
       mongodbDatabase: wekan
-      
+      # Wekan (Meteor 3) requires MongoDB change streams, which only work on a
+      # replica set. Run the bundled bitnami mongodb as a single-node replica set.
+      workload:
+        main:
+          podSpec:
+            containers:
+              main:
+                env:
+                  MONGODB_REPLICA_SET_MODE: primary
+                  MONGODB_REPLICA_SET_NAME: rs0
+                  # Must match the mongodb service name: <release>-mongodb
+                  MONGODB_ADVERTISED_HOSTNAME: wekan-makoto-mongodb
+                  # Internal keyfile auth for the replica set (required by the
+                  # bitnami image when auth + replica set mode are enabled).
+                  # Consider moving this into the SOPS clusterenv as a ${VAR}.
+                  MONGODB_REPLICA_SET_KEY: d950d2b3ca562d2290cc327a3f01a6c8
+
     workload:
       main:
         podSpec:
