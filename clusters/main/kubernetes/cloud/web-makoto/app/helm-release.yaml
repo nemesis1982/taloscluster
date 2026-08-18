@@ -66,13 +66,13 @@ spec:
       
     mariadb:
       enabled: true
-      mariadbUsername: wp_mak_secure
-      mariadbDatabase: AXK3sNDJP4mJDeXExBrGCAcAwB*q-Xhgn
+      mariadbUsername: "wp_mak_secure"
+      mariadbDatabase: "AXK3sNDJP4mJDeXExBrGCAcAwB*q-Xhgn
 
     wordpress:
       user: makoto-info
-      pass: hPv2qRHxd.aPdWpJQ_6tWi6-MHCjE8!kd
-      email: info@makoto-dokokaj.nl
+      pass: "hPv2qRHxd.aPdWpJQ_6tWi6-MHCjE8!kd"
+      email: "info@makoto-dokokaj.nl"
       first_name: Makoto
       last_name: Dokokaj
       blog_name: Makoto Dokokaj
