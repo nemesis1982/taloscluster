@@ -64,3 +64,23 @@ spec:
             trigger:
               schedule: 10 1 * * *
       
+    mariadb:
+      enabled: true
+      mariadbUsername: "wp_mak_secure"
+      mariadbDatabase: "AXK3sNDJP4mJDeXExBrGCAcAwB*q-Xhgn
+
+    wordpress:
+      user: makoto-info
+      pass: "hPv2qRHxd.aPdWpJQ_6tWi6-MHCjE8!kd"
+      email: "info@makoto-dokokaj.nl"
+      first_name: Makoto
+      last_name: Dokokaj
+      blog_name: Makoto Dokokaj
+      enable_reverse_proxy_headers: true
+
+    smtp:
+      enabled: true
+      host: "mail.makoto-dokokaj.nl"
+      port: 465
+      user: "info@makoto-dokokaj.nl"
+      pass: "&%M@k0tO<2023>!#"
