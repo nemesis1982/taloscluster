@@ -82,6 +82,29 @@ spec:
                   # bitnami image when auth + replica set mode are enabled).
                   # Consider moving this into the SOPS clusterenv as a ${VAR}.
                   MONGODB_REPLICA_SET_KEY: d950d2b3ca562d2290cc327a3f01a6c8
+                # The bitnami image only auto-initiates the replica set on an
+                # EMPTY data dir; on a restart with persisted data mongod comes
+                # up with an uninitiated replica set and wekan cannot connect.
+                # This hook makes the init self-healing on every container start.
+                lifecycle:
+                  postStart:
+                    type: exec
+                    command:
+                      - /bin/bash
+                      - -c
+                      - |
+                        for i in $(seq 1 60); do
+                          state=$(mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet \
+                            --eval 'try { print(rs.status().myState) } catch(e) { print(e.codeName) }' 2>/dev/null | tail -1)
+                          case "$state" in
+                            1) exit 0 ;;
+                            NotYetInitialized)
+                              mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet \
+                                --eval 'rs.initiate({_id:"rs0",members:[{_id:0,host:"wekan-makoto-mongodb:27017"}]})' && exit 0 ;;
+                          esac
+                          sleep 5
+                        done
+                        exit 0
 
     workload:
       main:
