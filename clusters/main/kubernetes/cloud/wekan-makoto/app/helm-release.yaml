@@ -82,6 +82,10 @@ spec:
                   # bitnami image when auth + replica set mode are enabled).
                   # Consider moving this into the SOPS clusterenv as a ${VAR}.
                   MONGODB_REPLICA_SET_KEY: d950d2b3ca562d2290cc327a3f01a6c8
+                  # Keep mongod's cache small: every probe tick spawns a mongosh
+                  # (Node.js, ~200MB) and with the default cache size the
+                  # container OOM-kills probes/execs, causing restart loops.
+                  MONGODB_EXTRA_FLAGS: "--wiredTigerCacheSizeGB=0.5"
                 # The bitnami image only auto-initiates the replica set on an
                 # EMPTY data dir; on a restart with persisted data mongod comes
                 # up with an uninitiated (or stuck memberless) replica set and
@@ -121,6 +125,13 @@ spec:
       service:
         main:
           publishNotReadyAddresses: true
+      resources:
+        requests:
+          cpu: 75m
+          memory: 512Mi
+        limits:
+          cpu: 1500m
+          memory: 4Gi
 
     workload:
       main:
