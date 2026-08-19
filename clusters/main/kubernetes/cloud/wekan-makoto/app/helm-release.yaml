@@ -119,11 +119,18 @@ spec:
                           sleep 5
                         done
                         exit 0
-      # The advertised replica-set address is the service; mongod dials it at
-      # boot to identify itself. Publish the address even before the pod is
-      # Ready, otherwise the self-check fails and the node never elects itself.
+      # A replica set member must advertise an address that resolves to the POD
+      # itself: mongod compares the member host against its own local addresses
+      # to recognise itself. A normal ClusterIP is a virtual IP that exists on
+      # no interface in the pod, so mongod decides it is not a member of its own
+      # replica set, marks itself REMOVED and never elects a primary
+      # ("No primary exists currently"). A headless service resolves the same
+      # DNS name directly to the pod IP, which fixes the self-check.
+      # publishNotReadyAddresses keeps that DNS record present during boot,
+      # before the probes mark the pod Ready.
       service:
         main:
+          clusterIP: None
           publishNotReadyAddresses: true
       resources:
         requests:
