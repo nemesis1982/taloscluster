@@ -28,6 +28,15 @@ spec:
     global:
       stopAll: false
 
+    # Chart 21.6.0 ships wekan v9.18, whose LDAP support cannot express this
+    # setup: it has no LDAP_GROUP_BASEDN (group searches run against
+    # LDAP_BASEDN) and LDAP_GROUP_FILTER_GROUP_NAME matches a single group only.
+    # v11.02 adds both, so the LDAP block below is the plain configuration
+    # instead of a set of workarounds.
+    image:
+      repository: docker.io/wekanteam/wekan
+      tag: v11.02@sha256:6934aa82c4111370ed20d3ca82861fb6117d9b19ba8230bce825f5b7cb772e3d
+
     credentials:
       minio:
         type: s3
@@ -290,8 +299,10 @@ spec:
                 # empty makes wekan fail loudly instead if mail is ever missing.
                 LDAP_DEFAULT_DOMAIN: ""
                 # Restrict login to the makoto_* groups. Members of
-                # LDAP_SYNC_ADMIN_GROUPS are also allowed in and become Wekan admins.
+                # LDAP_SYNC_ADMIN_GROUPS are also allowed in and become admins.
                 LDAP_GROUP_FILTER_ENABLE: true
+                # lldap keeps groups beside the users, not under them, so the
+                # group searches need their own base (v10+/v11 only).
                 LDAP_GROUP_BASEDN: ou=groups,dc=${DN},dc=${DC}
                 LDAP_GROUP_FILTER_OBJECTCLASS: groupOfUniqueNames
                 # lldap serves groupOfUniqueNames entries whose member attribute
@@ -300,6 +311,9 @@ spec:
                 LDAP_GROUP_FILTER_GROUP_MEMBER_ATTRIBUTE: uniqueMember
                 LDAP_GROUP_FILTER_GROUP_MEMBER_FORMAT: dn
                 LDAP_GROUP_FILTER_GROUP_ID_ATTRIBUTE: cn
+                # Comma-separated (v10+/v11). makoto_admin is NOT repeated here:
+                # wekan adds LDAP_SYNC_ADMIN_GROUPS to the allowed set when
+                # admin sync is on, so its members can log in as well.
                 LDAP_GROUP_FILTER_GROUP_NAME: "makoto_bestuur,makoto_penningmeester,makoto_trainer"
                 LDAP_SYNC_ADMIN_STATUS: true
                 LDAP_SYNC_ADMIN_GROUPS: "makoto_admin"
