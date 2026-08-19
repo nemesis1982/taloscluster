@@ -344,12 +344,21 @@ spec:
                 # OAUTH2_REQUEST_PERMISSIONS: ""
                 # OAUTH2_CA_CERT: ""
                 # OAUTH2_ADFS_ENABLED: false
-                # LDAP is the only way in: no local password login.
-                # Read as `!(PASSWORD_LOGIN_ENABLED === 'false')`, so the string
-                # "false" is what actually disables it.
-                # NOTE: this locks out the local account registered during
-                # setup - keep an lldap member of makoto_admin available.
-                PASSWORD_LOGIN_ENABLED: "false"
+                # MUST stay enabled while login goes through LDAP - setting this
+                # to "false" locks EVERYONE out, including LDAP users.
+                # client/components/main/layouts.js does
+                # `if (result === false) return;` and never un-hides
+                # `.at-pwd-form`, which CSS hides by default - and the
+                # authentication-method dropdown is prepended INTO that same
+                # form (connectionMethod.js), as are the username/password
+                # fields that LDAP login itself uses. So "no password login"
+                # removes the only way to reach the LDAP form.
+                # The flag is meant for OAuth2/OIDC-only setups, where the
+                # provider button lives outside .at-pwd-form.
+                # LDAP-only is instead enforced by: registration disabled, no
+                # local accounts existing, and wekan's own guard rejecting
+                # password logins for users whose authenticationMethod is ldap.
+                PASSWORD_LOGIN_ENABLED: "true"
 
                 # --- LDAP (lldap) integration ---
                 LDAP_ENABLE: true
