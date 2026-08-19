@@ -102,22 +102,34 @@ spec:
                       - /bin/bash
                       - -c
                       - |
-                        m() { mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval "$1" 2>/dev/null; }
+                        # stderr is kept (redirected onto stdout) so a failing
+                        # repair shows up in `kubectl logs`, instead of the
+                        # replica set staying broken with no explanation.
+                        m() { mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval "$1" 2>&1; }
                         for i in $(seq 1 60); do
                           state=$(m 'try { print(rs.status().myState) } catch(e) { print(e.codeName) }' | tail -1)
                           case "$state" in
-                            1) exit 0 ;;
+                            1) echo "replset: PRIMARY"; exit 0 ;;
                             NotYetInitialized)
+                              echo "replset: initiating"
                               m 'rs.initiate({_id:"rs0",members:[{_id:0,host:"wekan-makoto-mongodb:27017"}]})' ;;
-                            0|2|3|5|10|InvalidReplicaSetConfig)
+                            *)
+                              # Includes InvalidReplicaSetConfig ("we are not a
+                              # member of it"): the stored config names a host
+                              # that is not this pod, e.g. a pod hostname left
+                              # by an earlier auto-init. Rewrite the member list
+                              # to the (headless) service name and force it.
                               if [ "$i" -gt 12 ]; then
+                                echo "replset: state=$state, forcing reconfig"
                                 m 'c = db.getSiblingDB("local").system.replset.findOne();
                                    c.members = [{_id:0, host:"wekan-makoto-mongodb:27017"}];
+                                   c.version = c.version + 1;
                                    rs.reconfig(c, {force:true});'
                               fi ;;
                           esac
                           sleep 5
                         done
+                        echo "replset: giving up after 5 minutes"
                         exit 0
       # A replica set member must advertise an address that resolves to the POD
       # itself: mongod compares the member host against its own local addresses
@@ -223,6 +235,12 @@ spec:
                 # lldap attribute mapping
                 LDAP_USER_SEARCH_FIELD: uid
                 LDAP_USER_SEARCH_SCOPE: sub
+                # MUST be present, even empty: wekan does
+                # `if (User_Search_Filter !== '') { User_Search_Filter[0] ... }`,
+                # so an UNSET var is undefined, passes the !== '' test and throws
+                # a TypeError that the login handler swallows -> every LDAP login
+                # fails with no visible reason.
+                LDAP_USER_SEARCH_FILTER: ""
                 LDAP_UNIQUE_IDENTIFIER_FIELD: uid
                 LDAP_USERNAME_FIELD: uid
                 LDAP_FULLNAME_FIELD: cn
@@ -231,6 +249,13 @@ spec:
                 LDAP_EMAIL_MATCH_REQUIRE: false
                 LDAP_MERGE_EXISTING_USERS: true
                 LDAP_SYNC_USER_DATA: true
+                # Same "unset != empty" trap as LDAP_USER_SEARCH_FILTER:
+                # getDataToSyncUserData() calls .trim() on the fieldmap BEFORE
+                # checking whether sync is on, so an unset var throws on login.
+                LDAP_SYNC_USER_DATA_FIELDMAP: ""
+                # Unset would make the email fallback read "user@undefined";
+                # empty makes wekan fail loudly instead if mail is ever missing.
+                LDAP_DEFAULT_DOMAIN: ""
                 # Restrict login to the makoto_* groups. Members of
                 # LDAP_SYNC_ADMIN_GROUPS are also allowed in and become Wekan admins.
                 LDAP_GROUP_FILTER_ENABLE: true
