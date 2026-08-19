@@ -261,7 +261,10 @@ spec:
                 LDAP_GROUP_FILTER_ENABLE: true
                 LDAP_GROUP_BASEDN: ou=groups,dc=${DN},dc=${DC}
                 LDAP_GROUP_FILTER_OBJECTCLASS: groupOfUniqueNames
-                LDAP_GROUP_FILTER_GROUP_MEMBER_ATTRIBUTE: member
+                # lldap serves groupOfUniqueNames entries whose member attribute
+                # is uniqueMember (not member) - see lldap's own example configs,
+                # e.g. nextcloud "ldapGroupMemberAssocAttr uniqueMember".
+                LDAP_GROUP_FILTER_GROUP_MEMBER_ATTRIBUTE: uniqueMember
                 LDAP_GROUP_FILTER_GROUP_MEMBER_FORMAT: dn
                 LDAP_GROUP_FILTER_GROUP_ID_ATTRIBUTE: cn
                 LDAP_GROUP_FILTER_GROUP_NAME: "makoto_bestuur,makoto_penningmeester,makoto_trainer"
