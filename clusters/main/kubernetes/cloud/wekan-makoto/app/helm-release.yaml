@@ -75,6 +75,29 @@ spec:
       enabled: true
       mongodbUsername: wekan
       mongodbDatabase: wekan
+
+      persistence:
+        # Holds only the mongodump archive, mounted into the CronJob below.
+        # This is the volume that gets shipped offsite; the live mongodb data
+        # volume is deliberately NOT backed up directly.
+        dump:
+          enabled: true
+          size: 20Gi
+          targetSelector:
+            dump:
+              dump:
+                mountPath: /dump
+          volsync:
+            - name: dump
+              type: restic
+              credentials: minio
+              dest:
+                enabled: true
+              src:
+                enabled: true
+                # 01:30, after the 01:00 mongodump has completed.
+                trigger:
+                  schedule: 30 1 * * *
       # Wekan (Meteor 3) requires MongoDB change streams, which only work on a
       # replica set. Run the bundled bitnami mongodb as a single-node replica set.
       workload:
@@ -186,6 +209,68 @@ spec:
         main:
           clusterIP: None
           publishNotReadyAddresses: true
+
+      # --- Backups -------------------------------------------------------
+      # A volsync snapshot of the live mongodb volume would only ever be
+      # crash-consistent. Instead dump the database logically with mongodump
+      # (a point-in-time, restorable archive) onto its own small PVC, and let
+      # volsync ship THAT to S3. Restore = mongorestore of the archive, which
+      # also survives a MongoDB version change.
+      # These credentials mirror the parent chart's: subcharts do not inherit
+      # the top-level `credentials` block.
+      credentials:
+        minio:
+          type: s3
+          url: "${S3_URL}"
+          bucket: "taloscluster"
+          accessKey: "${S3_ACCESKEY}"
+          secretKey: "${S3_SECRETKEY}"
+          encrKey: "${S3_ENC}"
+
+      workload:
+        dump:
+          enabled: true
+          type: CronJob
+          # 01:00, so the dump is finished well before volsync picks it up.
+          schedule: "0 1 * * *"
+          podSpec:
+            restartPolicy: OnFailure
+            containers:
+              dump:
+                enabled: true
+                primary: true
+                # Same bitnami image as mongod itself: it ships mongodump, and
+                # it is already present on the node.
+                imageSelector: image
+                probes:
+                  liveness:
+                    enabled: false
+                  readiness:
+                    enabled: false
+                  startup:
+                    enabled: false
+                env:
+                  MONGODB_ROOT_PASSWORD:
+                    secretKeyRef:
+                      expandObjectName: false
+                      name: wekan-makoto-mongodb-credentials
+                      key: mongodb-root-password
+                command:
+                  - /bin/bash
+                  - -c
+                  - |
+                    set -euo pipefail
+                    # --archive to a temp name first, then move into place, so a
+                    # dump interrupted half-way can never overwrite the last
+                    # good archive volsync has yet to copy.
+                    mongodump \
+                      --host wekan-makoto-mongodb --port 27017 \
+                      -u root -p "$MONGODB_ROOT_PASSWORD" \
+                      --authenticationDatabase admin \
+                      --archive=/dump/wekan.archive.gz.tmp --gzip
+                    mv /dump/wekan.archive.gz.tmp /dump/wekan.archive.gz
+                    echo "mongodump done: $(date -u +%FT%TZ)"
+                    ls -lh /dump
       resources:
         requests:
           cpu: 75m
@@ -259,11 +344,19 @@ spec:
                 # OAUTH2_REQUEST_PERMISSIONS: ""
                 # OAUTH2_CA_CERT: ""
                 # OAUTH2_ADFS_ENABLED: false
+                # LDAP is the only way in: no local password login.
+                # Read as `!(PASSWORD_LOGIN_ENABLED === 'false')`, so the string
+                # "false" is what actually disables it.
+                # NOTE: this locks out the local account registered during
+                # setup - keep an lldap member of makoto_admin available.
+                PASSWORD_LOGIN_ENABLED: "false"
+
                 # --- LDAP (lldap) integration ---
                 LDAP_ENABLE: true
-                # Verbose LDAP logging while debugging login issues
-                LDAP_LOG_ENABLED: true
-                DEBUG: true
+                # Flip to true (both) to debug LDAP logins: without it wekan
+                # swallows every LDAP error and fails silently.
+                LDAP_LOG_ENABLED: "false"
+                DEBUG: "false"
                 DEFAULT_AUTHENTICATION_METHOD: "ldap"
                 LDAP_HOST: lldap-ldap.lldap.svc.cluster.local
                 LDAP_PORT: 3890
