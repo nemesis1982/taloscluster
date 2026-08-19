@@ -71,6 +71,36 @@ spec:
       workload:
         main:
           podSpec:
+            initContainers:
+              # ROOT CAUSE of the "no primary after every restart" loop: mongod
+              # checks whether the replica-set member host is itself within
+              # milliseconds of starting. At that moment the pod's address is
+              # usually not in the service EndpointSlice yet, so
+              # wekan-makoto-mongodb resolves to nothing, mongod concludes it is
+              # not a member of its own set, marks itself REMOVED - and never
+              # re-checks. The stored config is fine, which is why applying the
+              # very same config by hand later fixes it.
+              # Block mongod until its own DNS name resolves, so the check that
+              # runs once runs against a warm record.
+              dnswait:
+                enabled: true
+                type: init
+                imageSelector: wgetImage
+                command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    # getent, not nslookup: the wgetImage is plain ubuntu and
+                    # has no dnsutils, but getent is part of glibc.
+                    for i in $(seq 1 60); do
+                      if getent hosts wekan-makoto-mongodb; then
+                        echo "dns: wekan-makoto-mongodb resolves, starting mongod"
+                        exit 0
+                      fi
+                      sleep 1
+                    done
+                    echo "dns: still unresolved after 60s, starting anyway"
+                    exit 0
             containers:
               main:
                 env:
@@ -106,30 +136,33 @@ spec:
                         # repair shows up in `kubectl logs`, instead of the
                         # replica set staying broken with no explanation.
                         m() { mongosh -u root -p "$MONGODB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval "$1" 2>&1; }
-                        for i in $(seq 1 60); do
+                        notprimary=0
+                        for i in $(seq 1 90); do
                           state=$(m 'try { print(rs.status().myState) } catch(e) { print(e.codeName) }' | tail -1)
                           case "$state" in
                             1) echo "replset: PRIMARY"; exit 0 ;;
                             NotYetInitialized)
                               echo "replset: initiating"
                               m 'rs.initiate({_id:"rs0",members:[{_id:0,host:"wekan-makoto-mongodb:27017"}]})' ;;
-                            *)
-                              # Includes InvalidReplicaSetConfig ("we are not a
-                              # member of it"): the stored config names a host
-                              # that is not this pod, e.g. a pod hostname left
-                              # by an earlier auto-init. Rewrite the member list
-                              # to the (headless) service name and force it.
-                              if [ "$i" -gt 12 ]; then
+                            *[0-9]*|InvalidReplicaSetConfig)
+                              # mongod is answering but is not primary - almost
+                              # always REMOVED from the self-check race above.
+                              # Re-assert the (already correct) member host to
+                              # make mongod re-evaluate; this is exactly the
+                              # manual reconfig that fixes it.
+                              notprimary=$((notprimary + 1))
+                              if [ "$notprimary" -ge 3 ]; then
                                 echo "replset: state=$state, forcing reconfig"
                                 m 'c = db.getSiblingDB("local").system.replset.findOne();
                                    c.members = [{_id:0, host:"wekan-makoto-mongodb:27017"}];
                                    c.version = c.version + 1;
                                    rs.reconfig(c, {force:true});'
+                                notprimary=0
                               fi ;;
                           esac
-                          sleep 5
+                          sleep 2
                         done
-                        echo "replset: giving up after 5 minutes"
+                        echo "replset: giving up after 3 minutes"
                         exit 0
       # A replica set member must advertise an address that resolves to the POD
       # itself: mongod compares the member host against its own local addresses
