@@ -1,0 +1,88 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frontend
+  namespace: doorbell
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 15.38.0
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: false
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  timeout: 20m
+  dependsOn:
+    - name: backend        # HelmRelease.dependsOn references HelmReleases, not Kustomizations
+      namespace: doorbell
+  values:
+    image:
+      repository: registry.riptide.live/doorbelv2/frontend
+      tag: "0.3.1"
+      pullPolicy: IfNotPresent
+
+    securityContext:
+      container:
+        readOnlyRootFilesystem: false
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+
+    service:
+      main:
+        ports:
+          main:
+            port: 443
+            targetPort: 443
+            protocol: https      # also makes the default probes use scheme HTTPS
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+        annotations:
+          # The pod only listens on 443 with a self-signed cert -> re-encrypt, don't verify.
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+          nginx.ingress.kubernetes.io/proxy-ssl-verify: "off"
+          # SignalR hub /hubs/signaling holds long-lived upgraded connections.
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        hosts:
+          - host: doorbell.${DOMAIN_0}
+            paths:
+              - path: /
+                pathType: Prefix
+
+    workload:
+      main:
+        replicas: 1
+        podSpec:
+          containers:
+            main:
+              probes:
+                liveness:
+                  type: https
+                  path: /index.html
+                readiness:
+                  type: https
+                  path: /index.html
+                startup:
+                  type: https
+                  path: /index.html

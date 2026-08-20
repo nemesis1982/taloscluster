@@ -1,0 +1,12 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: doorbell-frontend
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: clusters/main/kubernetes/automation/doorbell/frontend/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: cluster

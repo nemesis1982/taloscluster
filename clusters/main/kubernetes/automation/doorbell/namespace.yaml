@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: doorbell
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: doorbell-coturn
+  labels:
+    # coturn runs with hostNetwork, which the default PSS "baseline" profile rejects.
+    pod-security.kubernetes.io/enforce: privileged

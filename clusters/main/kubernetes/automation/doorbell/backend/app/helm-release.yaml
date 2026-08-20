@@ -1,0 +1,157 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: backend
+  namespace: doorbell
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 15.38.0
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: false
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  timeout: 20m
+  values:
+    image:
+      repository: registry.riptide.live/doorbelv2/backend
+      tag: "0.3.1"
+      pullPolicy: IfNotPresent
+
+    securityContext:
+      container:
+        readOnlyRootFilesystem: false
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+
+    credentials:
+      minio:
+        type: s3
+        url: "${S3_URL}"
+        bucket: "taloscluster"
+        accessKey: "${S3_ACCESKEY}"
+        secretKey: "${S3_SECRETKEY}"
+        encrKey: "${S3_ENC}"
+
+    service:
+      # ClusterIP :8080 -- web API + SignalR hub, reached through the frontend proxy.
+      main:
+        ports:
+          main:
+            port: 8080
+            targetPort: 8080
+            protocol: http
+      # Device API :8081, published on the LAN as :5100 for the ESP32 devices (plain HTTP).
+      device:
+        enabled: true
+        type: LoadBalancer
+        loadBalancerIP: ${DOORBELL_DEVICE_IP}
+        externalTrafficPolicy: Local
+        integrations:
+          metallb:
+            enabled: true
+        ports:
+          device:
+            enabled: true
+            primary: true
+            port: 5100
+            targetPort: 8081
+            protocol: http
+
+    persistence:
+      data:
+        enabled: true
+        mountPath: /app/data
+        size: 10Gi          # doorbell.db, snapshots/, recordings/, motion/, chime/, firmware/
+        volsync:
+          - name: data
+            type: restic
+            credentials: minio
+            dest:
+              enabled: true
+            src:
+              enabled: true
+              trigger:
+                schedule: 20 1 * * *
+
+    workload:
+      main:
+        replicas: 1         # SQLite + in-memory connection registry: single replica only
+        strategy: Recreate  # RWO volume cannot be shared across a rolling update
+        podSpec:
+          containers:
+            main:
+              env:
+                ASPNETCORE_ENVIRONMENT: Production
+                Server__WebPort: "8080"
+                Server__DevicePort: "8081"
+                Cors__AllowedOrigins__0: "https://doorbell.${DOMAIN_0}"
+                PublicWebUrl: "https://doorbell.${DOMAIN_0}"
+                ConnectionStrings__AppDb: "Data Source=/app/data/doorbell.db"
+                Storage__SnapshotsPath: /app/data/snapshots
+                Storage__RecordingsPath: /app/data/recordings
+                Storage__MotionPath: /app/data/motion
+                Storage__ChimePath: /app/data/chime
+                Storage__FirmwarePath: /app/data/firmware
+                Media__FfmpegPath: ffmpeg
+                Logging__Sqlite__MinLevel: Warning
+                Push__Subject: "mailto:${DOMAIN_0_EMAIL}"
+                Ice__StunUrl: "stun:${DOORBELL_TURN_IP}:3478"
+                Ice__TurnUrl: "turn:${DOORBELL_TURN_IP}:3478"
+                Auth__SeedAdminUsername: admin
+                Jwt__Secret:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: doorbell-secrets
+                    key: Jwt__Secret
+                Auth__DeviceToken:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: doorbell-secrets
+                    key: Auth__DeviceToken
+                Auth__SeedAdminPassword:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: doorbell-secrets
+                    key: Auth__SeedAdminPassword
+                Ice__TurnSecret:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: doorbell-secrets
+                    key: Ice__TurnSecret
+                Push__PublicKey:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: doorbell-secrets
+                    key: Push__PublicKey
+                Push__PrivateKey:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: doorbell-secrets
+                    key: Push__PrivateKey
+              probes:
+                # "type" MUST be set: app-template defaults every probe to tcp and then
+                # silently ignores a bare "path:".
+                liveness:
+                  type: http
+                  path: /health
+                readiness:
+                  type: http
+                  path: /health
+                startup:
+                  type: http
+                  path: /health

@@ -1,0 +1,19 @@
+---
+# The frontend nginx hard-codes "proxy_pass http://backend:8080". TrueCharts renders the real
+# service as "backend-app-template", so this alias points the well-known name at the same pods.
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: doorbell
+spec:
+  type: ClusterIP
+  ports:
+    - name: main
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    pod.name: main
+    app.kubernetes.io/name: app-template
+    app.kubernetes.io/instance: backend
