@@ -48,22 +48,18 @@ spec:
         encrKey: "${S3_ENC}"
 
     service:
-      # ClusterIP :8080 -- web API + SignalR hub, reached through the frontend proxy.
+      # ClusterIP :8080 -- web API + SignalR hub. Browsers reach it through the frontend
+      # proxy; the ESP32 devices reach it directly via the doorbell-int internal ingress.
       main:
         ports:
           main:
             port: 8080
             targetPort: 8080
             protocol: http
-      # Device API :8081, published on the LAN as :5100 for the ESP32 devices (plain HTTP).
+      # Device API :8081 -- ClusterIP only, published on the LAN by the doorbell-device
+      # internal ingress. No LoadBalancer: the devices resolve a name, not an IP.
       device:
         enabled: true
-        type: LoadBalancer
-        loadBalancerIP: ${DOORBELL_DEVICE_IP}
-        externalTrafficPolicy: Local
-        integrations:
-          metallb:
-            enabled: true
         ports:
           device:
             enabled: true
@@ -71,6 +67,51 @@ spec:
             port: 5100
             targetPort: 8081
             protocol: http
+
+    # Both hosts are served by the "internal" class on ${NGINX_INTERNAL_IP} -- LAN only,
+    # never routed through the public "external" controller.
+    ingress:
+      # Hub + web API for the devices: https://doorbell-int.${DOMAIN_0} -> backend :8080
+      main:
+        enabled: true
+        primary: true
+        ingressClassName: internal
+        targetSelector:
+          main: main
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+        annotations:
+          # SignalR hub /hubs/signaling holds long-lived upgraded connections.
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        hosts:
+          - host: doorbell-int.${DOMAIN_0}
+            paths:
+              - path: /
+                pathType: Prefix
+      # Device API: https://doorbell-device.${DOMAIN_0} -> backend :8081
+      device:
+        enabled: true
+        primary: false
+        ingressClassName: internal
+        targetSelector:
+          device: device
+        integrations:
+          certManager:
+            enabled: true
+            certificateIssuer: domain-0-le-prod
+        annotations:
+          # Snapshot / recording / firmware uploads: no body cap, generous timeouts.
+          nginx.ingress.kubernetes.io/proxy-body-size: "0"
+          nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+          nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+        hosts:
+          - host: doorbell-device.${DOMAIN_0}
+            paths:
+              - path: /
+                pathType: Prefix
 
     persistence:
       data:
