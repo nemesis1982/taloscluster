@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/doorbelv2/backend
-      tag: "0.3.4"
+      tag: "0.3.6"
       pullPolicy: IfNotPresent
 
     securityContext:
