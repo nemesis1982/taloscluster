@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 15.38.0
+      version: 18.16.13
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/doorbelv2/backend
-      tag: "0.6.0"
+      tag: "0.6.1"
       pullPolicy: IfNotPresent
 
     securityContext:
