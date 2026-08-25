@@ -46,19 +46,19 @@ spec:
         secretKey: "${S3_SECRETKEY}"
         encrKey: "${S3_ENC}"
 
-    ingress:
-      main:
-        enabled: true
-        ingressClassName: internal
-        integrations:
-          certManager:
-            enabled: true
-            certificateIssuer: domain-0-le-prod
-        hosts:
-          - host: makoto-wekan.${DOMAIN_0}
-            paths:
-              - path: /
-                pathType: Prefix
+    #ingress:
+    #  main:
+    #    enabled: true
+    #    ingressClassName: internal
+    #    integrations:
+    #      certManager:
+    #        enabled: true
+    #        certificateIssuer: domain-0-le-prod
+    #    hosts:
+    #      - host: makoto-wekan.${DOMAIN_0}
+    #        paths:
+    #          - path: /
+    #            pathType: Prefix
     persistence:
       data:
         volsync:
