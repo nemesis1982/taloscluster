@@ -205,29 +205,6 @@ spec:
       # DNS name directly to the pod IP, which fixes the self-check.
       # publishNotReadyAddresses keeps that DNS record present during boot,
       # before the probes mark the pod Ready.
-      service:
-        main:
-          clusterIP: None
-          publishNotReadyAddresses: true
-
-      # --- Backups -------------------------------------------------------
-      # A volsync snapshot of the live mongodb volume would only ever be
-      # crash-consistent. Instead dump the database logically with mongodump
-      # (a point-in-time, restorable archive) onto its own small PVC, and let
-      # volsync ship THAT to S3. Restore = mongorestore of the archive, which
-      # also survives a MongoDB version change.
-      # These credentials mirror the parent chart's: subcharts do not inherit
-      # the top-level `credentials` block.
-      credentials:
-        minio:
-          type: s3
-          url: "${S3_URL}"
-          bucket: "taloscluster"
-          accessKey: "${S3_ACCESKEY}"
-          secretKey: "${S3_SECRETKEY}"
-          encrKey: "${S3_ENC}"
-
-      workload:
         dump:
           enabled: true
           type: CronJob
@@ -271,6 +248,29 @@ spec:
                     mv /dump/wekan.archive.gz.tmp /dump/wekan.archive.gz
                     echo "mongodump done: $(date -u +%FT%TZ)"
                     ls -lh /dump
+
+      service:
+        main:
+          clusterIP: None
+          publishNotReadyAddresses: true
+
+      # --- Backups -------------------------------------------------------
+      # A volsync snapshot of the live mongodb volume would only ever be
+      # crash-consistent. Instead dump the database logically with mongodump
+      # (a point-in-time, restorable archive) onto its own small PVC, and let
+      # volsync ship THAT to S3. Restore = mongorestore of the archive, which
+      # also survives a MongoDB version change.
+      # These credentials mirror the parent chart's: subcharts do not inherit
+      # the top-level `credentials` block.
+      credentials:
+        minio:
+          type: s3
+          url: "${S3_URL}"
+          bucket: "taloscluster"
+          accessKey: "${S3_ACCESKEY}"
+          secretKey: "${S3_SECRETKEY}"
+          encrKey: "${S3_ENC}"
+
       resources:
         requests:
           cpu: 75m
