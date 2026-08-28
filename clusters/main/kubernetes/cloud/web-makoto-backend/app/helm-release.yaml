@@ -79,21 +79,21 @@ spec:
                 - secretRef:
                     name: makoto-secrets
               probes:
-            liveness:
-              enabled: true
-              custom: true
-              spec:
-                exec:
-                  command: ["python", "-m", "makoto_backend", "healthcheck"]
-                periodSeconds: 60
-                failureThreshold: 3
-            startup:
-              enabled: true
-              custom: true
-              spec:
-                exec:
-                  command: ["python", "-m", "makoto_backend", "healthcheck"]
-                periodSeconds: 30
-                failureThreshold: 20
-            readiness:
-              enabled: false
+                liveness:
+                  enabled: true
+                  custom: true
+                  spec:
+                    exec:
+                      command: ["python", "-m", "makoto_backend", "healthcheck"]
+                    periodSeconds: 60
+                    failureThreshold: 3
+                startup:
+                  enabled: true
+                  custom: true
+                  spec:
+                    exec:
+                      command: ["python", "-m", "makoto_backend", "healthcheck"]
+                    periodSeconds: 30
+                    failureThreshold: 20
+                readiness:
+                  enabled: false
