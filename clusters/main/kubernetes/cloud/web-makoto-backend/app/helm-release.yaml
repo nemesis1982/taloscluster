@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/makoto-backend
-      tag: "1.2.2"
+      tag: "1.3.0"
       pullPolicy: IfNotPresent
 
     securityContext:
@@ -46,6 +46,14 @@ spec:
         accessKey: "${S3_ACCESKEY}"
         secretKey: "${S3_SECRETKEY}"
         encrKey: "${S3_ENC}"
+
+    service:
+      main:
+        ports:
+          main:
+            port: 8080
+            targetPort: 8080
+            protocol: http
 
     persistence:
       data:
@@ -113,17 +121,26 @@ spec:
                   enabled: true
                   custom: true
                   spec:
-                    exec:
-                      command: ["python", "-m", "makoto_backend", "healthcheck"]
+                    httpGet:
+                      path: /healthz
+                      port: 8080
                     periodSeconds: 60
                     failureThreshold: 3
                 startup:
                   enabled: true
                   custom: true
                   spec:
-                    exec:
-                      command: ["python", "-m", "makoto_backend", "healthcheck"]
+                    httpGet:
+                      path: /healthz
+                      port: 8080
                     periodSeconds: 30
                     failureThreshold: 20
                 readiness:
-                  enabled: false
+                  enabled: true
+                  custom: true
+                  spec:
+                    httpGet:
+                      path: /healthz
+                      port: 8080
+                    periodSeconds: 30
+                    failureThreshold: 3
