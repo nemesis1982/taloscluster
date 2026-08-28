@@ -74,10 +74,40 @@ spec:
               env:
                 DRY_RUN: "0"
                 POLL_INTERVAL: "300"
-              # Reference a pre-created Secret (recommended) rather than typing secrets in the GUI:
-              envFrom:
-                - secretRef:
+                # Secret values — reference the pre-created Secret key-by-key. Do NOT use envFrom
+                # (see the troubleshooting note below): app-template's envFrom existence check fails
+                # against a Flux-managed Secret. Per-key secretKeyRef with expandObjectName: false
+                # is the pattern that works.
+                JBN_USER:
+                  secretKeyRef:
+                    expandObjectName: false
                     name: makoto-secrets
+                    key: JBN_USER
+                JBN_PASS:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: makoto-secrets
+                    key: JBN_PASS
+                JBN_TOTP_URL:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: makoto-secrets
+                    key: JBN_TOTP_URL
+                WP_BASE_URL:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: makoto-secrets
+                    key: WP_BASE_URL
+                WP_USER:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: makoto-secrets
+                    key: WP_USER
+                WP_APP_PASSWORD:
+                  secretKeyRef:
+                    expandObjectName: false
+                    name: makoto-secrets
+                    key: WP_APP_PASSWORD
               probes:
                 liveness:
                   enabled: true
