@@ -1,0 +1,99 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: web-makoto-backend
+  namespace: web-makoto-backend
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 18.16.13
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: false
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  timeout: 20m
+  values:
+    image:
+      repository: registry.riptide.live/makoto-backend
+      tag: "1.1.0"
+      pullPolicy: IfNotPresent
+
+    securityContext:
+      container:
+        readOnlyRootFilesystem: false
+        runAsNonRoot: false
+        runAsUser: 0
+        runAsGroup: 0
+
+    credentials:
+      minio:
+        type: s3
+        url: "${S3_URL}"
+        bucket: "taloscluster"
+        accessKey: "${S3_ACCESKEY}"
+        secretKey: "${S3_SECRETKEY}"
+        encrKey: "${S3_ENC}"
+
+    persistence:
+      data:
+        enabled: true
+        mountPath: /data
+        size: 10Gi  # persists the JBN session (auth_state.json) + artifacts
+        volsync:
+          - name: data
+            type: restic
+            credentials: minio
+            dest:
+              enabled: true
+            src:
+              enabled: true
+              trigger:
+                schedule: 20 1 * * *
+
+    workload:
+      main:
+        replicas: 1         # SQLite + in-memory connection registry: single replica only
+        strategy: Recreate  # RWO volume cannot be shared across a rolling update
+        podSpec:
+          containers:
+            main:
+              args: ["orchestrate"]
+              env:
+                DRY_RUN: "0"
+                POLL_INTERVAL: "300"
+              # Reference a pre-created Secret (recommended) rather than typing secrets in the GUI:
+              envFrom:
+                - secretRef:
+                    name: makoto-secrets
+              probes:
+            liveness:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command: ["python", "-m", "makoto_backend", "healthcheck"]
+                periodSeconds: 60
+                failureThreshold: 3
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                exec:
+                  command: ["python", "-m", "makoto_backend", "healthcheck"]
+                periodSeconds: 30
+                failureThreshold: 20
+            readiness:
+              enabled: false
