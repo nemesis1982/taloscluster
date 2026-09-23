@@ -28,7 +28,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/makoto-backend
-      tag: "1.24.0"
+      tag: "1.24.1"
       pullPolicy: IfNotPresent
 
     securityContext:
