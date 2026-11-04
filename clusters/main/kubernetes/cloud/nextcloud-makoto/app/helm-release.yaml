@@ -24,6 +24,34 @@ spec:
     remediation:
       retries: 3
   timeout: 20m
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: ConfigMap
+              name: nextcloud-makoto-opcache
+            patch: |
+              - op: replace
+                path: /data/opcache-recommended.ini
+                value: |
+                  opcache.enable=1
+                  opcache.save_comments=1
+                  opcache.jit=off
+                  opcache.interned_strings_buffer=32
+                  opcache.max_accelerated_files=10000
+                  opcache.memory_consumption=128
+                  opcache.revalidate_freq=60
+                  opcache.jit_buffer_size=0
+          - target:
+              group: volsync.backube
+              version: v1alpha1
+              kind: ReplicationSource
+              name: nextcloud-makoto-html-html
+            patch: |
+              - op: add
+                path: /spec/restic/cacheCapacity
+                value: 20Gi
   values:
     global:
       stopAll: false
