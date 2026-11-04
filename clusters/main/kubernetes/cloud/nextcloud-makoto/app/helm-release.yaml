@@ -29,6 +29,38 @@ spec:
     - kustomize:
         patches:
           - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              name: nextcloud-makoto-nginx
+            patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: nextcloud-makoto-nginx
+              spec:
+                template:
+                  spec:
+                    initContainers:
+                      - name: nextcloud-makoto-init-wait-nextcloud
+                        image: oci.trueforge.org/containerforge/nextcloud-fpm:34.0.4@sha256:ac87e0b36ad8b4690ceebfecf8cb91394fd7ffd20735e748b70562261248790b
+          - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              name: nextcloud-makoto-notify
+            patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: nextcloud-makoto-notify
+              spec:
+                template:
+                  spec:
+                    initContainers:
+                      - name: nextcloud-makoto-init-wait-nextcloud
+                        image: oci.trueforge.org/containerforge/nextcloud-fpm:34.0.4@sha256:ac87e0b36ad8b4690ceebfecf8cb91394fd7ffd20735e748b70562261248790b
+          - target:
               version: v1
               kind: ConfigMap
               name: nextcloud-makoto-opcache
@@ -57,9 +89,28 @@ spec:
     global:
       stopAll: false
 
+    image:
+      repository: docker.io/library/nextcloud
+      tag: 34.0.5-fpm@sha256:63c0152e7955f2edd5e25818fa098b10955513ca2cf207ba2324066b42df631b
+
     postgres16Image:
       repository: ghcr.io/cloudnative-pg/postgresql
       tag: 16.14@sha256:8c0bc715bff42162c1a7da081c93e3d081d16218e0d0d16ffaf83da7f286876d
+
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              probes:
+                readiness:
+                  enabled: true
+                  type: exec
+                  command: [php, /var/www/html/occ, status, --output=json]
+                liveness:
+                  enabled: true
+                  type: exec
+                  command: [php, /var/www/html/occ, status, --output=json]
 
     redis:
       volumeClaimTemplates:
