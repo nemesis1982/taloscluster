@@ -45,6 +45,22 @@ spec:
                       - name: nextcloud-makoto-init-wait-nextcloud
                         image: oci.trueforge.org/containerforge/nextcloud-fpm:33.0.5@sha256:43ba65e8e39c836ed3746d5a4418c67d070bc854abdefd4c3cc722c86abdfd80
           - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              name: nextcloud-makoto-notify
+            patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: nextcloud-makoto-notify
+              spec:
+                template:
+                  spec:
+                    initContainers:
+                      - name: nextcloud-makoto-init-wait-nextcloud
+                        image: oci.trueforge.org/containerforge/nextcloud-fpm:33.0.5@sha256:43ba65e8e39c836ed3746d5a4418c67d070bc854abdefd4c3cc722c86abdfd80
+          - target:
               version: v1
               kind: ConfigMap
               name: nextcloud-makoto-opcache
@@ -153,6 +169,7 @@ spec:
                 pathType: Prefix
     cnpg:
       main:
+        pgVersion: 16
         cluster:
           singleNode: true
         #mode: recovery   # Set to 'recovery' when recovery from S3, also change the revisions
