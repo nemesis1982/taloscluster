@@ -28,6 +28,24 @@ spec:
     - kustomize:
         patches:
           - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              labelSelector: app.kubernetes.io/instance=nextcloud-makoto
+            patch: |
+              - op: replace
+                path: /spec/replicas
+                value: 0
+          - target:
+              group: batch
+              version: v1
+              kind: CronJob
+              labelSelector: app.kubernetes.io/instance=nextcloud-makoto
+            patch: |
+              - op: add
+                path: /spec/suspend
+                value: true
+          - target:
               version: v1
               kind: ConfigMap
               name: nextcloud-makoto-opcache
