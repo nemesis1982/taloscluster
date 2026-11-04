@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: nextcloud
-      version: 43.0.15
+      version: 45.3.1
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -22,7 +22,8 @@ spec:
   upgrade:
     crds: CreateReplace
     remediation:
-      retries: 3
+      retries: 0
+      remediateLastFailure: false
   timeout: 20m
   postRenderers:
     - kustomize:
@@ -55,6 +56,19 @@ spec:
   values:
     global:
       stopAll: false
+
+    redis:
+      volumeClaimTemplates:
+        data:
+          enabled: false
+      persistence:
+        data:
+          enabled: true
+          type: pvc
+          size: 1Gi
+          storageClass: longhorn
+          retain: true
+          mountPath: /bitnami/valkey
 
     credentials:
       minio:
