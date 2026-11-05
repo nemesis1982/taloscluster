@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: registry.riptide.live/cv_server
-      tag: v1.1.3
+      tag: v1.1.4
       pullPolicy: IfNotPresent
     securityContext:
       container:
